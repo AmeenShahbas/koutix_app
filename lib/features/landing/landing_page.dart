@@ -645,68 +645,186 @@ class WhyChooseSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Simplify Daily Operations',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: AppTheme.secondaryColor,
-              letterSpacing: 1.0,
+          // Header Section
+          if (isDesktop)
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  flex: 5,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(left: 12),
+                        decoration: const BoxDecoration(
+                          border: Border(
+                            left: BorderSide(
+                              color: AppTheme.secondaryColor,
+                              width: 4,
+                            ),
+                          ),
+                        ),
+                        child: const Text(
+                          'SIMPLIFY DAILY OPERATIONS',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black54,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      const Text(
+                        'Because your store\ndeserves more than\njust a Billing Machine',
+                        style: TextStyle(
+                          fontSize: 48,
+                          height: 1.1,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.black,
+                          letterSpacing: -1.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 60),
+                Expanded(
+                  flex: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      'Our platform goes beyond basic billing to give you full visibility and control. Manage inventory, align your staff, and deliver meaningful results.',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey[600],
+                        height: 1.6,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          else
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(left: 12),
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      left: BorderSide(
+                        color: AppTheme.secondaryColor,
+                        width: 4,
+                      ),
+                    ),
+                  ),
+                  child: const Text(
+                    'SIMPLIFY DAILY OPERATIONS',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black54,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'Because your store\ndeserves more than\njust a Billing Machine',
+                  style: TextStyle(
+                    fontSize: 40,
+                    height: 1.1,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.black,
+                    letterSpacing: -1.0,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  'Our platform goes beyond basic billing to give you full visibility and control. Manage inventory, align your staff, and deliver meaningful results.',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey[600],
+                    height: 1.6,
+                  ),
+                ),
+              ],
             ),
+
+          const SizedBox(height: 80),
+
+          // Cards Grid
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return Wrap(
+                spacing: 24,
+                runSpacing: 24,
+                alignment: WrapAlignment.start,
+                children: const [
+                  _FeatureCard(
+                    icon: Icons.grid_view_rounded,
+                    title: 'All-in-One Workspace',
+                    description:
+                        'Manage tasks, documents, timelines, and teams in one platform.',
+                  ),
+                  _FeatureCard(
+                    icon: Icons.auto_graph_rounded,
+                    title: 'Real-Time Progress Tracking',
+                    description:
+                        'Monitor the progress of each project visually with interactive charts.',
+                  ),
+                  _FeatureCard(
+                    icon: Icons.pie_chart_rounded,
+                    title: 'Insights & Reports',
+                    description:
+                        'Automatic reports on project performance & team productivity.',
+                  ),
+                ],
+              );
+            },
           ),
-          const SizedBox(height: 12),
-          const Text(
-            'Why Supermarkets Choose Koutix',
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-              color: Colors.black, // Changed from primary to black
+
+          const SizedBox(height: 80),
+
+          // Stats Banner
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
+            decoration: BoxDecoration(
+              color: AppTheme.primaryColor,
+              borderRadius: BorderRadius.circular(32),
+              boxShadow: [
+                BoxShadow(
+                  color: AppTheme.primaryColor.withOpacity(0.3),
+                  blurRadius: 30,
+                  offset: const Offset(0, 15),
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 24),
-          const SizedBox(
-            width: 700,
-            child: Text(
-              'Managing a supermarket should not require multiple systems, manual registers, or guesswork. Koutix brings everything into one web application.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.black54,
-                height: 1.6,
-              ),
+            child: Wrap(
+              alignment: WrapAlignment.spaceEvenly,
+              spacing: 40,
+              runSpacing: 40,
+              children: const [
+                _StatItem(
+                  icon: Icons.people_alt_rounded,
+                  value: '10k+',
+                  label: 'Happy Users',
+                ),
+                _StatItem(
+                  icon: Icons.download_rounded,
+                  value: '20k+',
+                  label: 'Total Downloads',
+                ),
+                _StatItem(
+                  icon: Icons.star_rounded,
+                  value: '4.9',
+                  label: 'User Rating',
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 60),
-          Wrap(
-            spacing: 24,
-            runSpacing: 24,
-            alignment: WrapAlignment.center,
-            children: const [
-              _FeatureCard(
-                icon: Icons.timer_outlined,
-                title: 'Reduce Billing Delays',
-                description:
-                    'Faster checkout queues with our optimized POS integration.',
-              ),
-              _FeatureCard(
-                icon: Icons.inventory_2_outlined,
-                title: 'Accurate Inventory',
-                description:
-                    'Prevent over-ordering and wastage with real-time tracking.',
-              ),
-              _FeatureCard(
-                icon: Icons.trending_up,
-                title: 'Real-time Profit Tracking',
-                description:
-                    'View daily sales and margins instantly from anywhere.',
-              ),
-              _FeatureCard(
-                icon: Icons.security,
-                title: 'Secure Access',
-                description:
-                    'Manage staff roles and counter access with full logs.',
-              ),
-            ],
           ),
         ],
       ),
@@ -732,7 +850,8 @@ class _FeatureCard extends StatelessWidget {
       padding: const EdgeInsets.all(40),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.grey[100]!),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.02),
@@ -747,8 +866,8 @@ class _FeatureCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppTheme.primaryColor.withOpacity(0.05),
-              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.primaryColor,
+              borderRadius: BorderRadius.circular(16),
             ),
             child: Icon(icon, color: Colors.white, size: 32),
           ),
