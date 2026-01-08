@@ -13,6 +13,7 @@ class App extends StatelessWidget {
     if (kIsWeb) {
       // WEB APP (Admin)
       return MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Koutix Admin',
         theme: AppTheme.lightTheme,
         home: const LandingPage(),
@@ -20,6 +21,7 @@ class App extends StatelessWidget {
     } else {
       // MOBILE APP (Partner – later)
       return MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Koutix Partner',
         theme: AppTheme.lightTheme,
         home: const PartnerHomeScreen(),

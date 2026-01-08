@@ -3,8 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // Colors
-  static const Color primaryColor = Color(0xFF4A171E); // Burgundy
-  static const Color secondaryColor = Color(0xFFE2B144); // Gold
+  static const Color primaryColor = Color(0xFFA9ED42); // Burgundy
+  static const Color secondaryColor = Color(0xFF10290A); // Gold
   static const Color backgroundColor = Colors.white;
   static const Color surfaceColor = Colors.white;
   static const Color errorColor = Color(0xFFB00020);
