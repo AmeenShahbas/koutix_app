@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:koutix_app/core/theme/app_theme.dart';
 import 'package:koutix_app/features/admin/dashboard/dashboard_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -42,73 +44,87 @@ class LandingNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Floating Navbar
-    return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: getResponsiveHorizontalPadding(context),
-        vertical: 32,
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12), // Pill shape
-        border: Border.all(color: Colors.grey[200]!, width: 1.5),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 20,
-            offset: const Offset(0, 4),
+    return FadeInDown(
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.easeOut,
+      from: 20,
+      child: RepaintBoundary(
+        child: Container(
+          margin: EdgeInsets.symmetric(
+            horizontal: getResponsiveHorizontalPadding(context),
+            vertical: 32,
           ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Logo Only (No Text)
-          SvgPicture.asset('assets/icons/logowithoutbg.svg', height: 36),
-
-          // Desktop Links (Centered)
-          if (MediaQuery.of(context).size.width > 900)
-            Row(
-              children: [
-                _NavLink(title: 'Home', isActive: true),
-                _NavLink(title: 'Features'),
-                _NavLink(title: 'Why Us'),
-                _NavLink(title: 'Benefits'),
-                _NavLink(title: 'Testimonials'),
-              ],
-            ),
-
-          // Action Button
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const AdminDashboardScreen()),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme
-                  .primaryColor, // Reverting to Primary color for contrast on white/grey bar
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(100), // Pill shape like buttons
+            border: Border.all(color: Colors.grey[200]!, width: 1.5),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.04),
+                blurRadius: 20,
+                offset: const Offset(0, 4),
               ),
-              elevation: 0,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: const [
-                Text(
-                  'Download App',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                SizedBox(width: 8),
-                Icon(Icons.arrow_forward, size: 16),
-              ],
-            ),
+            ],
           ),
-        ],
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Logo Only (No Text)
+              SvgPicture.asset('assets/icons/logowithoutbg.svg', height: 36),
+
+              // Desktop Links (Centered)
+              if (MediaQuery.of(context).size.width > 900)
+                Row(
+                  children: [
+                    _NavLink(title: 'Home', isActive: true),
+                    _NavLink(title: 'Features'),
+                    _NavLink(title: 'Why Us'),
+                    _NavLink(title: 'Benefits'),
+                    _NavLink(title: 'Testimonials'),
+                  ],
+                ),
+
+              // Action Button
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const AdminDashboardScreen(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme
+                      .primaryColor, // Reverting to Primary color for contrast on white/grey bar
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 16,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      100,
+                    ), // Circle/Pill shape for button
+                  ),
+                  elevation: 0,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Text(
+                      'Download App',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(width: 8),
+                    Icon(Icons.arrow_forward, size: 16),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -146,16 +162,16 @@ class LandingHeroSection extends StatelessWidget {
     return Container(
       width: double.infinity,
       // Subtle grid or gradient background could go here
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Colors.white,
-            const Color(0xFFF5F5FA), // Very light purple/grey tint
-          ],
-        ),
-      ),
+      // decoration: BoxDecoration(
+      //   gradient: LinearGradient(
+      //     begin: Alignment.topLeft,
+      //     end: Alignment.bottomRight,
+      //     colors: [
+      //       Colors.white,
+      //       const Color(0xFFF5F5FA), // Very light purple/grey tint
+      //     ],
+      //   ),
+      // ),
       // Conditional Padding: Desktop gets 0 right padding for "Bleed" effect
       child: isDesktop
           ? Padding(
@@ -212,127 +228,134 @@ class _HeroContent extends StatelessWidget {
         : CrossAxisAlignment.start;
     final textAlign = centerAlign ? TextAlign.center : TextAlign.left;
 
-    return Column(
-      crossAxisAlignment: align,
-      children: [
-        // Badge
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color: AppTheme.primaryColor.withOpacity(
-              0.08,
-            ), // Primary with opacity
-            borderRadius: BorderRadius.circular(100),
-            border: Border.all(color: AppTheme.primaryColor.withOpacity(0.1)),
+    return FadeInUp(
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.easeOut,
+      from: 20,
+      child: Column(
+        crossAxisAlignment: align,
+        children: [
+          // Badge
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              color: AppTheme.primaryColor.withOpacity(0.08),
+              borderRadius: BorderRadius.circular(100),
+              border: Border.all(color: AppTheme.primaryColor.withOpacity(0.1)),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.verified, size: 18, color: AppTheme.primaryColor),
+                const SizedBox(width: 8),
+                Text(
+                  '#1 Best Supermarket Software',
+                  style: GoogleFonts.poppins(
+                    color: AppTheme.primaryColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
+          const SizedBox(height: 32),
+          // Headline
+          Text(
+            'All-in-One Supermarket\nManagement App for\nProductive Teams',
+            textAlign: textAlign,
+            style: GoogleFonts.poppins(
+              fontSize: 50, // Reduced from 64 for minimal look
+              height: 1.1,
+              fontWeight: FontWeight.bold, // Reduced form w900
+              color: Colors.black,
+              letterSpacing: -1.0,
+            ),
+          ),
+          const SizedBox(height: 24),
+          // Subtext
+          SizedBox(
+            width: 600,
+            child: Text(
+              'Improve collaboration, monitor progress in real-time, and complete billing on time — all in one intuitive, easy-to-use dashboard.',
+              textAlign: textAlign,
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.black54,
+                height: 1.5,
+              ),
+            ),
+          ),
+          const SizedBox(height: 40),
+          // Buttons
+          Wrap(
+            spacing: 16,
+            runSpacing: 16,
+            alignment: centerAlign ? WrapAlignment.center : WrapAlignment.start,
             children: [
-              Icon(Icons.verified, size: 18, color: AppTheme.primaryColor),
-              const SizedBox(width: 8),
-              Text(
-                '#1 Best Supermarket Software',
-                style: TextStyle(
-                  color: AppTheme.primaryColor, // Matching text to theme
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
+              ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.primaryColor, // Primary Color
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 20,
+                  ),
+                  textStyle: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      100,
+                    ), // Circle/Pill shape
+                  ),
+                  elevation: 5,
+                  shadowColor: AppTheme.primaryColor.withOpacity(0.5),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Text('Try it for Free'),
+                    SizedBox(width: 8),
+                    Icon(Icons.arrow_forward, size: 20),
+                  ],
+                ),
+              ),
+              OutlinedButton(
+                onPressed: () {},
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.black87,
+                  side: const BorderSide(color: Colors.grey, width: 1),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 20,
+                  ),
+                  textStyle: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      100,
+                    ), // Circle/Pill shape
+                  ),
+                  backgroundColor: Colors.white,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Text('Learn More'),
+                    SizedBox(width: 8),
+                    Icon(Icons.arrow_forward, size: 20),
+                  ],
                 ),
               ),
             ],
           ),
-        ),
-        const SizedBox(height: 32),
-        // Headline
-        Text(
-          'All-in-One Supermarket\nManagement App for\nProductive Teams',
-          textAlign: textAlign,
-          style: const TextStyle(
-            fontSize: 64, // Big headline like reference
-            height: 1.1,
-            fontWeight: FontWeight.w900,
-            color: Colors.black,
-            letterSpacing: -1.5,
-          ),
-        ),
-        const SizedBox(height: 24),
-        // Subtext
-        SizedBox(
-          width: 600,
-          child: Text(
-            'Improve collaboration, monitor progress in real-time, and complete billing on time — all in one intuitive, easy-to-use dashboard.',
-            textAlign: textAlign,
-            style: const TextStyle(
-              fontSize: 20,
-              color: Colors.black54,
-              height: 1.5,
-            ),
-          ),
-        ),
-        const SizedBox(height: 40),
-        // Buttons
-        Wrap(
-          spacing: 16,
-          runSpacing: 16,
-          alignment: centerAlign ? WrapAlignment.center : WrapAlignment.start,
-          children: [
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryColor, // Primary Color
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 20,
-                ),
-                textStyle: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                elevation: 5,
-                shadowColor: AppTheme.primaryColor.withOpacity(0.5),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Text('Try it for Free'),
-                  SizedBox(width: 8),
-                  Icon(Icons.arrow_forward, size: 20),
-                ],
-              ),
-            ),
-            OutlinedButton(
-              onPressed: () {},
-              style: OutlinedButton.styleFrom(
-                foregroundColor: Colors.black87,
-                side: const BorderSide(color: Colors.grey, width: 1),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 20,
-                ),
-                textStyle: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                backgroundColor: Colors.white,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Text('Learn More'),
-                  SizedBox(width: 8),
-                  Icon(Icons.arrow_forward, size: 20),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -342,102 +365,109 @@ class _HeroImageComposition extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        // Laptop / Web Dashboard Mockup (Back Layer)
-        Transform.translate(
-          offset: const Offset(40, 0),
-          child: Container(
-            height: 450,
-            width: 700,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: Colors.grey[200]!, width: 4),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 50,
-                  offset: const Offset(0, 20),
+    return FadeInUp(
+      delay: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.easeOut,
+      child: RepaintBoundary(
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            // Laptop / Web Dashboard Mockup (Back Layer)
+            Transform.translate(
+              offset: const Offset(40, 0),
+              child: Container(
+                height: 480,
+                width: 720,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.zero, // Removed border radius
+                  border: Border.all(color: Colors.grey[200]!, width: 4),
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //     color: Colors.black.withOpacity(0.1),
+                  //     blurRadius: 50,
+                  //     offset: const Offset(0, 20),
+                  //   ),
+                  // ],
                 ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Column(
-                children: [
-                  // Browser Bar
-                  Container(
-                    height: 30,
-                    color: Colors.grey[100],
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 4,
-                          backgroundColor: Colors.red[200],
+                child: ClipRRect(
+                  borderRadius: BorderRadius.zero,
+                  child: Column(
+                    children: [
+                      // Browser Bar
+                      Container(
+                        height: 30,
+                        color: Colors.grey[100],
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 4,
+                              backgroundColor: Colors.red[200],
+                            ),
+                            const SizedBox(width: 6),
+                            CircleAvatar(
+                              radius: 4,
+                              backgroundColor: Colors.orange[200],
+                            ),
+                            const SizedBox(width: 6),
+                            CircleAvatar(
+                              radius: 4,
+                              backgroundColor: Colors.green[200],
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 6),
-                        CircleAvatar(
-                          radius: 4,
-                          backgroundColor: Colors.orange[200],
-                        ),
-                        const SizedBox(width: 6),
-                        CircleAvatar(
-                          radius: 4,
-                          backgroundColor: Colors.green[200],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        "Web Admin Dashboard",
-                        style: TextStyle(color: Colors.grey[300]),
                       ),
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            "Web Admin Dashboard",
+                            style: TextStyle(color: Colors.grey[300]),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            // Mobile App Mockup (Front Layer)
+            Transform.translate(
+              offset: const Offset(-180, 80),
+              child: Container(
+                height: 480,
+                width: 240,
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.zero, // Removed border radius
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //     color: Colors.black.withOpacity(0.2),
+                  //     blurRadius: 40,
+                  //     offset: const Offset(0, 20),
+                  //   ),
+                  // ],
+                ),
+                padding: const EdgeInsets.all(12),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.zero,
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Partner App",
+                      style: TextStyle(color: Colors.grey[300]),
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-        ),
-
-        // Mobile App Mockup (Front Layer)
-        Transform.translate(
-          offset: const Offset(-180, 80),
-          child: Container(
-            height: 480,
-            width: 240,
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(36),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 40,
-                  offset: const Offset(0, 20),
-                ),
-              ],
-            ),
-            padding: const EdgeInsets.all(12),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(28),
-              ),
-              child: Center(
-                child: Text(
-                  "Partner App",
-                  style: TextStyle(color: Colors.grey[300]),
                 ),
               ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
@@ -468,8 +498,14 @@ class TrustedBySection extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 40),
-          const _InfiniteLogosList(),
+          const SizedBox(height: 20),
+          // const SizedBox(height: 20),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: getResponsiveHorizontalPadding(context),
+            ),
+            child: const _InfiniteLogosList(),
+          ),
         ],
       ),
     );
@@ -540,7 +576,7 @@ class _InfiniteLogosListState extends State<_InfiniteLogosList> {
     // 50,000 pixels at 20 pixels/sec = 2500 seconds (~40 mins of loop)
     // In a real app with infinite items, this is sufficient for a session.
     const double dist = 50000.0;
-    const double speed = 20.0; // pixels per sec
+    const double speed = 100.0; // pixels per sec
     final double time = dist / speed;
 
     if (_scrollController.hasClients) {
@@ -583,7 +619,7 @@ class _InfiniteLogosListState extends State<_InfiniteLogosList> {
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: _logos[index % _logos.length],
             );
           },
@@ -609,186 +645,68 @@ class WhyChooseSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header Section
-          if (isDesktop)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Expanded(
-                  flex: 5,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(left: 12),
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            left: BorderSide(
-                              color: AppTheme.secondaryColor,
-                              width: 4,
-                            ),
-                          ),
-                        ),
-                        child: const Text(
-                          'SIMPLIFY DAILY OPERATIONS',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black54,
-                            letterSpacing: 1.2,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      const Text(
-                        'Because your store\ndeserves more than\njust a Billing Machine',
-                        style: TextStyle(
-                          fontSize: 48,
-                          height: 1.1,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.black,
-                          letterSpacing: -1.0,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 60),
-                Expanded(
-                  flex: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Text(
-                      'Our platform goes beyond basic billing to give you full visibility and control. Manage inventory, align your staff, and deliver meaningful results.',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.grey[600],
-                        height: 1.6,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            )
-          else
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(left: 12),
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      left: BorderSide(
-                        color: AppTheme.secondaryColor,
-                        width: 4,
-                      ),
-                    ),
-                  ),
-                  child: const Text(
-                    'SIMPLIFY DAILY OPERATIONS',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black54,
-                      letterSpacing: 1.2,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                const Text(
-                  'Because your store\ndeserves more than\njust a Billing Machine',
-                  style: TextStyle(
-                    fontSize: 40,
-                    height: 1.1,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.black,
-                    letterSpacing: -1.0,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                Text(
-                  'Our platform goes beyond basic billing to give you full visibility and control. Manage inventory, align your staff, and deliver meaningful results.',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey[600],
-                    height: 1.6,
-                  ),
-                ),
-              ],
+          const Text(
+            'Simplify Daily Operations',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.secondaryColor,
+              letterSpacing: 1.0,
             ),
-
-          const SizedBox(height: 80),
-
-          // Cards Grid
-          LayoutBuilder(
-            builder: (context, constraints) {
-              return Wrap(
-                spacing: 24,
-                runSpacing: 24,
-                alignment: WrapAlignment.start,
-                children: const [
-                  _FeatureCard(
-                    icon: Icons.grid_view_rounded,
-                    title: 'All-in-One Workspace',
-                    description:
-                        'Manage tasks, documents, timelines, and teams in one platform.',
-                  ),
-                  _FeatureCard(
-                    icon: Icons.auto_graph_rounded,
-                    title: 'Real-Time Progress Tracking',
-                    description:
-                        'Monitor the progress of each project visually with interactive charts.',
-                  ),
-                  _FeatureCard(
-                    icon: Icons.pie_chart_rounded,
-                    title: 'Insights & Reports',
-                    description:
-                        'Automatic reports on project performance & team productivity.',
-                  ),
-                ],
-              );
-            },
           ),
-
-          const SizedBox(height: 80),
-
-          // Stats Banner
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
-            decoration: BoxDecoration(
-              color: AppTheme.primaryColor,
-              borderRadius: BorderRadius.circular(32),
-              boxShadow: [
-                BoxShadow(
-                  color: AppTheme.primaryColor.withOpacity(0.3),
-                  blurRadius: 30,
-                  offset: const Offset(0, 15),
-                ),
-              ],
+          const SizedBox(height: 12),
+          const Text(
+            'Why Supermarkets Choose Koutix',
+            style: TextStyle(
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+              color: Colors.black, // Changed from primary to black
             ),
-            child: Wrap(
-              alignment: WrapAlignment.spaceEvenly,
-              spacing: 40,
-              runSpacing: 40,
-              children: const [
-                _StatItem(
-                  icon: Icons.people_alt_rounded,
-                  value: '10k+',
-                  label: 'Happy Users',
-                ),
-                _StatItem(
-                  icon: Icons.download_rounded,
-                  value: '20k+',
-                  label: 'Total Downloads',
-                ),
-                _StatItem(
-                  icon: Icons.star_rounded,
-                  value: '4.9',
-                  label: 'User Rating',
-                ),
-              ],
+          ),
+          const SizedBox(height: 24),
+          const SizedBox(
+            width: 700,
+            child: Text(
+              'Managing a supermarket should not require multiple systems, manual registers, or guesswork. Koutix brings everything into one web application.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.black54,
+                height: 1.6,
+              ),
             ),
+          ),
+          const SizedBox(height: 60),
+          Wrap(
+            spacing: 24,
+            runSpacing: 24,
+            alignment: WrapAlignment.center,
+            children: const [
+              _FeatureCard(
+                icon: Icons.timer_outlined,
+                title: 'Reduce Billing Delays',
+                description:
+                    'Faster checkout queues with our optimized POS integration.',
+              ),
+              _FeatureCard(
+                icon: Icons.inventory_2_outlined,
+                title: 'Accurate Inventory',
+                description:
+                    'Prevent over-ordering and wastage with real-time tracking.',
+              ),
+              _FeatureCard(
+                icon: Icons.trending_up,
+                title: 'Real-time Profit Tracking',
+                description:
+                    'View daily sales and margins instantly from anywhere.',
+              ),
+              _FeatureCard(
+                icon: Icons.security,
+                title: 'Secure Access',
+                description:
+                    'Manage staff roles and counter access with full logs.',
+              ),
+            ],
           ),
         ],
       ),
@@ -814,8 +732,7 @@ class _FeatureCard extends StatelessWidget {
       padding: const EdgeInsets.all(40),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey[100]!),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.02),
@@ -830,8 +747,8 @@ class _FeatureCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppTheme.primaryColor,
-              borderRadius: BorderRadius.circular(16),
+              color: AppTheme.primaryColor.withOpacity(0.05),
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, color: Colors.white, size: 32),
           ),
@@ -925,9 +842,9 @@ class FeaturesSection extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Text(
+          Text(
             'Complete Supermarket Management',
-            style: TextStyle(
+            style: GoogleFonts.poppins(
               fontSize: 36,
               fontWeight: FontWeight.bold,
               color: Colors.black87,
@@ -991,7 +908,7 @@ class _LargeFeatureRow extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: AppTheme.primaryColor,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(100), // Circle like button
             ),
             child: Icon(icon, color: Colors.white, size: 28),
           ),
@@ -1022,7 +939,7 @@ class _LargeFeatureRow extends StatelessWidget {
         height: 400,
         decoration: BoxDecoration(
           color: imageColor,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.zero, // Removed border radius
         ),
         // Placeholder for feature image
         child: Center(
@@ -1061,9 +978,9 @@ class HowItWorksSection extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Text(
+          Text(
             'Get Started in 3 Simple Steps',
-            style: TextStyle(
+            style: GoogleFonts.poppins(
               fontSize: 32,
               fontWeight: FontWeight.bold,
               color: Colors.black87,
@@ -1121,7 +1038,7 @@ class _StepCard extends StatelessWidget {
         children: [
           Text(
             step,
-            style: TextStyle(
+            style: GoogleFonts.poppins(
               fontSize: 80,
               fontWeight: FontWeight.bold,
               color: Colors.grey[200],
@@ -1165,10 +1082,10 @@ class BenefitsSection extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Text(
+          Text(
             'Designed for Local Supermarkets. Scalable Globally.',
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: GoogleFonts.poppins(
               fontSize: 32,
               fontWeight: FontWeight.bold,
               color: Colors.white,
@@ -1216,7 +1133,7 @@ class _BenefitTag extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadius.circular(100), // Pill shape
         border: Border.all(color: Colors.white24),
       ),
       child: Text(
@@ -1243,10 +1160,10 @@ class FinalCTASection extends StatelessWidget {
       color: Colors.white,
       child: Column(
         children: [
-          const Text(
+          Text(
             'Start Managing Your Supermarket Smarter Today',
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: GoogleFonts.poppins(
               fontSize: 42,
               fontWeight: FontWeight.bold,
               color: Colors.black87,
@@ -1271,6 +1188,11 @@ class FinalCTASection extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
               elevation: 8,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(
+                  100,
+                ), // Circle/Pill shape for button
+              ),
             ),
             child: const Text('Create Free Supermarket Account'),
           ),
@@ -1300,9 +1222,9 @@ class LandingFooter extends StatelessWidget {
             children: [
               const Icon(Icons.storefront, color: Colors.white, size: 32),
               const SizedBox(width: 12),
-              const Text(
+              Text(
                 'Koutix',
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                   color: Colors.white,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
