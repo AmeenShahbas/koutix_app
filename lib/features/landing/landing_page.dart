@@ -19,20 +19,29 @@ class LandingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: const [
-            LandingNavBar(),
-            LandingHeroSection(),
-            TrustedBySection(),
-            WhyChooseSection(),
-            FeaturesSection(),
-            HowItWorksSection(),
-            BenefitsSection(),
-            FinalCTASection(),
-            LandingFooter(),
-          ],
-        ),
+      body: Stack(
+        children: [
+          // Global Grid Background
+          Positioned.fill(
+            child: CustomPaint(painter: const GridPatternPainter()),
+          ),
+          // Scrollable Content
+          ListView(
+            cacheExtent: 1.0,
+            addAutomaticKeepAlives: false,
+            children: const [
+              LandingNavBar(),
+              LandingHeroSection(),
+              TrustedBySection(),
+              WhyChooseSection(),
+              FeaturesSection(),
+              HowItWorksSection(),
+              BenefitsSection(),
+              FinalCTASection(),
+              LandingFooter(),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -48,82 +57,56 @@ class LandingNavBar extends StatelessWidget {
       duration: const Duration(milliseconds: 600),
       curve: Curves.easeOut,
       from: 20,
-      child: RepaintBoundary(
-        child: Container(
-          margin: EdgeInsets.symmetric(
-            horizontal: getResponsiveHorizontalPadding(context),
-            vertical: 32,
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(100), // Pill shape like buttons
-            border: Border.all(color: Colors.grey[200]!, width: 1.5),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.04),
-                blurRadius: 20,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // Logo Only (No Text)
-              SvgPicture.asset('assets/icons/logowithoutbg.svg', height: 36),
+      child: Container(
+        margin: EdgeInsets.symmetric(
+          horizontal: getResponsiveHorizontalPadding(context),
+          vertical: 32,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(100), // Pill shape like buttons
+          border: Border.all(color: Colors.grey[200]!, width: 1.5),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 20,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Logo Only (No Text)
+            SvgPicture.asset('assets/icons/logowithoutbg.svg', height: 50),
 
-              // Desktop Links (Centered)
-              if (MediaQuery.of(context).size.width > 900)
-                Row(
-                  children: [
-                    _NavLink(title: 'Home', isActive: true),
-                    _NavLink(title: 'Features'),
-                    _NavLink(title: 'Why Us'),
-                    _NavLink(title: 'Benefits'),
-                    _NavLink(title: 'Testimonials'),
-                  ],
-                ),
-
-              // Action Button
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const AdminDashboardScreen(),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme
-                      .primaryColor, // Reverting to Primary color for contrast on white/grey bar
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 16,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      100,
-                    ), // Circle/Pill shape for button
-                  ),
-                  elevation: 0,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Text(
-                      'Download App',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(width: 8),
-                    Icon(Icons.arrow_forward, size: 16),
-                  ],
-                ),
+            // Desktop Links (Centered)
+            if (MediaQuery.of(context).size.width > 900)
+              Row(
+                children: [
+                  _NavLink(title: 'Home', isActive: true),
+                  _NavLink(title: 'Features'),
+                  _NavLink(title: 'Why Us'),
+                  _NavLink(title: 'Benefits'),
+                  _NavLink(title: 'Testimonials'),
+                ],
               ),
-            ],
-          ),
+
+            // Action Button
+            _AnimatedHeroButton(
+              title: 'Download App',
+              isSmall: true,
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const AdminDashboardScreen(),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -239,9 +222,9 @@ class _HeroContent extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: AppTheme.primaryColor.withOpacity(0.08),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(100),
-              border: Border.all(color: AppTheme.primaryColor.withOpacity(0.1)),
+              border: Border.all(color: AppTheme.primaryColor.withOpacity(0.3)),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -264,10 +247,10 @@ class _HeroContent extends StatelessWidget {
           Text(
             'All-in-One Supermarket\nManagement App for\nProductive Teams',
             textAlign: textAlign,
-            style: GoogleFonts.poppins(
-              fontSize: 50, // Reduced from 64 for minimal look
+            style: const TextStyle(
+              fontSize: 48,
               height: 1.1,
-              fontWeight: FontWeight.bold, // Reduced form w900
+              fontWeight: FontWeight.w900,
               color: Colors.black,
               letterSpacing: -1.0,
             ),
@@ -292,67 +275,7 @@ class _HeroContent extends StatelessWidget {
             spacing: 16,
             runSpacing: 16,
             alignment: centerAlign ? WrapAlignment.center : WrapAlignment.start,
-            children: [
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primaryColor, // Primary Color
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 32,
-                    vertical: 20,
-                  ),
-                  textStyle: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      100,
-                    ), // Circle/Pill shape
-                  ),
-                  elevation: 5,
-                  shadowColor: AppTheme.primaryColor.withOpacity(0.5),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Text('Try it for Free'),
-                    SizedBox(width: 8),
-                    Icon(Icons.arrow_forward, size: 20),
-                  ],
-                ),
-              ),
-              OutlinedButton(
-                onPressed: () {},
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.black87,
-                  side: const BorderSide(color: Colors.grey, width: 1),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 32,
-                    vertical: 20,
-                  ),
-                  textStyle: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      100,
-                    ), // Circle/Pill shape
-                  ),
-                  backgroundColor: Colors.white,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Text('Learn More'),
-                    SizedBox(width: 8),
-                    Icon(Icons.arrow_forward, size: 20),
-                  ],
-                ),
-              ),
-            ],
+            children: [const _AnimatedHeroButton()],
           ),
         ],
       ),
@@ -641,7 +564,7 @@ class WhyChooseSection extends StatelessWidget {
         vertical: 100,
         horizontal: getResponsiveHorizontalPadding(context),
       ),
-      color: Colors.grey[50],
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -652,54 +575,42 @@ class WhyChooseSection extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 5,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(left: 12),
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            left: BorderSide(
-                              color: AppTheme.secondaryColor,
-                              width: 4,
-                            ),
-                          ),
-                        ),
-                        child: const Text(
-                          'SIMPLIFY DAILY OPERATIONS',
+                  child: FadeInUp(
+                    duration: const Duration(milliseconds: 600),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Badge(text: 'SIMPLIFY DAILY OPERATIONS'),
+                        const SizedBox(height: 24),
+                        const Text(
+                          'Because your store\ndeserves more than\njust a Billing Machine',
                           style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black54,
-                            letterSpacing: 1.2,
+                            fontSize: 48,
+                            height: 1.1,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.black,
+                            letterSpacing: -1.0,
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 24),
-                      const Text(
-                        'Because your store\ndeserves more than\njust a Billing Machine',
-                        style: TextStyle(
-                          fontSize: 48,
-                          height: 1.1,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.black,
-                          letterSpacing: -1.0,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(width: 60),
                 Expanded(
                   flex: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Text(
-                      'Our platform goes beyond basic billing to give you full visibility and control. Manage inventory, align your staff, and deliver meaningful results.',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.grey[600],
-                        height: 1.6,
+                  child: FadeInUp(
+                    delay: const Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 600),
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Text(
+                        'Our platform goes beyond basic billing to give you full visibility and control. Manage inventory, align your staff, and deliver meaningful results.',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey[600],
+                          height: 1.6,
+                        ),
                       ),
                     ),
                   ),
@@ -707,50 +618,34 @@ class WhyChooseSection extends StatelessWidget {
               ],
             )
           else
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(left: 12),
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      left: BorderSide(
-                        color: AppTheme.secondaryColor,
-                        width: 4,
-                      ),
-                    ),
-                  ),
-                  child: const Text(
-                    'SIMPLIFY DAILY OPERATIONS',
+            FadeInUp(
+              duration: const Duration(milliseconds: 600),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Badge(text: 'SIMPLIFY DAILY OPERATIONS'),
+                  const SizedBox(height: 24),
+                  const Text(
+                    'Because your store\ndeserves more than\njust a Billing Machine',
                     style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black54,
-                      letterSpacing: 1.2,
+                      fontSize: 40,
+                      height: 1.1,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.black,
+                      letterSpacing: -1.0,
                     ),
                   ),
-                ),
-                const SizedBox(height: 24),
-                const Text(
-                  'Because your store\ndeserves more than\njust a Billing Machine',
-                  style: TextStyle(
-                    fontSize: 40,
-                    height: 1.1,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.black,
-                    letterSpacing: -1.0,
+                  const SizedBox(height: 24),
+                  Text(
+                    'Our platform goes beyond basic billing to give you full visibility and control. Manage inventory, align your staff, and deliver meaningful results.',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey[600],
+                      height: 1.6,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 24),
-                Text(
-                  'Our platform goes beyond basic billing to give you full visibility and control. Manage inventory, align your staff, and deliver meaningful results.',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey[600],
-                    height: 1.6,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
 
           const SizedBox(height: 80),
@@ -758,28 +653,52 @@ class WhyChooseSection extends StatelessWidget {
           // Cards Grid
           LayoutBuilder(
             builder: (context, constraints) {
+              // Calculate dynamic width to fill the container like the Stats Banner
+              // 3 cards with 24px spacing between them
+              double cardWidth = (constraints.maxWidth - (24 * 2)) / 3;
+              // Responsive fallback: if card becomes too small (< 300), switch to wrap logic or full width
+              if (cardWidth < 300) {
+                cardWidth = constraints.maxWidth; // Stack vertically on mobile
+              }
+
               return Wrap(
                 spacing: 24,
                 runSpacing: 24,
-                alignment: WrapAlignment.start,
-                children: const [
-                  _FeatureCard(
-                    icon: Icons.grid_view_rounded,
-                    title: 'All-in-One Workspace',
-                    description:
-                        'Manage tasks, documents, timelines, and teams in one platform.',
+                alignment: WrapAlignment
+                    .start, // Start alignment works better when filling width
+                children: [
+                  FadeInUp(
+                    delay: const Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 600),
+                    child: _FeatureCard(
+                      width: cardWidth,
+                      icon: Icons.grid_view_rounded,
+                      title: 'All-in-One Workspace',
+                      description:
+                          'Manage tasks, documents, timelines, and teams in one platform.',
+                    ),
                   ),
-                  _FeatureCard(
-                    icon: Icons.auto_graph_rounded,
-                    title: 'Real-Time Progress Tracking',
-                    description:
-                        'Monitor the progress of each project visually with interactive charts.',
+                  FadeInUp(
+                    delay: const Duration(milliseconds: 500),
+                    duration: const Duration(milliseconds: 600),
+                    child: _FeatureCard(
+                      width: cardWidth,
+                      icon: Icons.auto_graph_rounded,
+                      title: 'Real-Time Progress Tracking',
+                      description:
+                          'Monitor the progress of each project visually with interactive charts.',
+                    ),
                   ),
-                  _FeatureCard(
-                    icon: Icons.pie_chart_rounded,
-                    title: 'Insights & Reports',
-                    description:
-                        'Automatic reports on project performance & team productivity.',
+                  FadeInUp(
+                    delay: const Duration(milliseconds: 700),
+                    duration: const Duration(milliseconds: 600),
+                    child: _FeatureCard(
+                      width: cardWidth,
+                      icon: Icons.pie_chart_rounded,
+                      title: 'Insights & Reports',
+                      description:
+                          'Automatic reports on project performance & team productivity.',
+                    ),
                   ),
                 ],
               );
@@ -789,41 +708,38 @@ class WhyChooseSection extends StatelessWidget {
           const SizedBox(height: 80),
 
           // Stats Banner
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
-            decoration: BoxDecoration(
-              color: AppTheme.primaryColor,
-              borderRadius: BorderRadius.circular(32),
-              boxShadow: [
-                BoxShadow(
-                  color: AppTheme.primaryColor.withOpacity(0.3),
-                  blurRadius: 30,
-                  offset: const Offset(0, 15),
-                ),
-              ],
-            ),
-            child: Wrap(
-              alignment: WrapAlignment.spaceEvenly,
-              spacing: 40,
-              runSpacing: 40,
-              children: const [
-                _StatItem(
-                  icon: Icons.people_alt_rounded,
-                  value: '10k+',
-                  label: 'Happy Users',
-                ),
-                _StatItem(
-                  icon: Icons.download_rounded,
-                  value: '20k+',
-                  label: 'Total Downloads',
-                ),
-                _StatItem(
-                  icon: Icons.star_rounded,
-                  value: '4.9',
-                  label: 'User Rating',
-                ),
-              ],
+          FadeInUp(
+            delay: const Duration(milliseconds: 900),
+            duration: const Duration(milliseconds: 600),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
+              decoration: BoxDecoration(
+                color: AppTheme.primaryColor,
+                borderRadius: BorderRadius.circular(32),
+              ),
+              child: Wrap(
+                alignment: WrapAlignment.spaceEvenly,
+                spacing: 40,
+                runSpacing: 40,
+                children: const [
+                  _StatItem(
+                    icon: Icons.people_alt_rounded,
+                    value: '10k+',
+                    label: 'Happy Users',
+                  ),
+                  _StatItem(
+                    icon: Icons.download_rounded,
+                    value: '20k+',
+                    label: 'Total Downloads',
+                  ),
+                  _StatItem(
+                    icon: Icons.star_rounded,
+                    value: '4.9',
+                    label: 'User Rating',
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -836,58 +752,81 @@ class _FeatureCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final String description;
+  final double? width;
 
   const _FeatureCard({
     required this.icon,
     required this.title,
     required this.description,
+    this.width,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 350,
-      padding: const EdgeInsets.all(40),
+      width: width ?? 350,
+      height: 280, // Fixed height for uniformity
+      padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey[100]!),
+        border: Border.all(color: Colors.grey.shade200),
         boxShadow: [
+          // Minimal Container Glow - Enhanced
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            color: AppTheme.primaryColor.withOpacity(0.08), // Increased opacity
+            blurRadius: 32, // Increased blur
+            offset: const Offset(0, 12),
+            spreadRadius: 2, // Slight spread
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment:
+            MainAxisAlignment.spaceBetween, // Cover entire container
         children: [
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppTheme.primaryColor,
-              borderRadius: BorderRadius.circular(16),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppTheme.primaryColor.withOpacity(0.1)),
+              boxShadow: [
+                // Minimal Icon Glow - Enhanced
+                BoxShadow(
+                  color: AppTheme.primaryColor.withOpacity(
+                    0.2,
+                  ), // Increased opacity
+                  blurRadius: 16, // Increased blur
+                  offset: const Offset(0, 4),
+                  spreadRadius: 2,
+                ),
+              ],
             ),
-            child: Icon(icon, color: Colors.white, size: 32),
+            child: Icon(icon, color: AppTheme.primaryColor, size: 24),
           ),
-          const SizedBox(height: 60),
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            description,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.black54,
-              height: 1.6,
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                description,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.grey[600],
+                  height: 1.6,
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -914,11 +853,11 @@ class _StatItem extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
+            color: AppTheme.secondaryColor.withOpacity(0.2),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.white.withOpacity(0.1)),
+            border: Border.all(color: AppTheme.secondaryColor.withOpacity(0.1)),
           ),
-          child: Icon(icon, color: Colors.white, size: 32),
+          child: Icon(icon, color: AppTheme.secondaryColor, size: 32),
         ),
         const SizedBox(width: 20),
         Column(
@@ -929,7 +868,7 @@ class _StatItem extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: AppTheme.secondaryColor,
                 height: 1,
               ),
             ),
@@ -939,7 +878,7 @@ class _StatItem extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: Colors.white.withOpacity(0.8),
+                color: AppTheme.secondaryColor.withOpacity(0.8),
               ),
             ),
           ],
@@ -961,40 +900,55 @@ class FeaturesSection extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text(
-            'Complete Supermarket Management',
-            style: GoogleFonts.poppins(
-              fontSize: 36,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
+          FadeInUp(
+            duration: const Duration(milliseconds: 600),
+            child: Text(
+              'Complete Supermarket Management',
+              style: GoogleFonts.poppins(
+                fontSize: 36,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
             ),
           ),
           const SizedBox(height: 60),
-          _LargeFeatureRow(
-            reversed: false,
-            imageColor: Colors.blue[50]!,
-            title: 'Fast & Reliable Billing',
-            subtitle:
-                'Process customer bills quickly with a stable, secure billing system designed for high-volume supermarket counters.',
-            icon: Icons.receipt,
+          FadeInUp(
+            delay: const Duration(milliseconds: 200),
+            duration: const Duration(milliseconds: 600),
+            child: _LargeFeatureRow(
+              reversed: false,
+              imageColor: Colors.blue[50]!,
+              title: 'Fast & Reliable Billing',
+              subtitle:
+                  'Process customer bills quickly with a stable, secure billing system designed for high-volume supermarket counters.',
+              icon: Icons.receipt,
+            ),
           ),
           const SizedBox(height: 80),
-          _LargeFeatureRow(
-            reversed: true,
-            imageColor: Colors.green[50]!,
-            title: 'Inventory & Stock Control',
-            subtitle:
-                'Track stock movement in real time, monitor low-stock items, and prevent over-ordering or wastage.',
-            icon: Icons.inventory,
+          FadeInUp(
+            delay: const Duration(milliseconds: 400),
+            duration: const Duration(milliseconds: 600),
+            child: _LargeFeatureRow(
+              reversed: true,
+              imageColor: Colors.green[50]!,
+              title: 'Inventory & Stock Control',
+              subtitle:
+                  'Track stock movement in real time, monitor low-stock items, and prevent over-ordering or wastage.',
+              icon: Icons.inventory,
+            ),
           ),
           const SizedBox(height: 80),
-          _LargeFeatureRow(
-            reversed: false,
-            imageColor: Colors.orange[50]!,
-            title: 'Business Insights',
-            subtitle:
-                'View daily, weekly, and monthly sales reports to understand performance and make better business decisions.',
-            icon: Icons.bar_chart,
+          FadeInUp(
+            delay: const Duration(milliseconds: 600),
+            duration: const Duration(milliseconds: 600),
+            child: _LargeFeatureRow(
+              reversed: false,
+              imageColor: Colors.orange[50]!,
+              title: 'Business Insights',
+              subtitle:
+                  'View daily, weekly, and monthly sales reports to understand performance and make better business decisions.',
+              icon: Icons.bar_chart,
+            ),
           ),
         ],
       ),
@@ -1090,48 +1044,60 @@ class HowItWorksSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFFF9FAFB),
+      // color: const Color(0xFFF9FAFB), // Removed for global grid background
       padding: EdgeInsets.symmetric(
         vertical: 100,
         horizontal: getResponsiveHorizontalPadding(context),
       ),
       child: Column(
         children: [
-          Text(
-            'Get Started in 3 Simple Steps',
-            style: GoogleFonts.poppins(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
+          FadeInUp(
+            duration: const Duration(milliseconds: 600),
+            child: Column(
+              children: [
+                Text(
+                  'Get Started in 3 Simple Steps',
+                  style: GoogleFonts.poppins(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'No complex setup. No technical knowledge required.',
+                  style: TextStyle(fontSize: 18, color: Colors.black54),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 16),
-          const Text(
-            'No complex setup. No technical knowledge required.',
-            style: TextStyle(fontSize: 18, color: Colors.black54),
-          ),
           const SizedBox(height: 60),
-          Wrap(
-            spacing: 40,
-            runSpacing: 40,
-            alignment: WrapAlignment.center,
-            children: [
-              _StepCard(
-                step: '01',
-                title: 'Create Account',
-                desc: 'Create your supermarket account online in seconds.',
-              ),
-              _StepCard(
-                step: '02',
-                title: 'Add Data',
-                desc: 'Add products, staff, and billing counters easily.',
-              ),
-              _StepCard(
-                step: '03',
-                title: 'Start Billing',
-                desc: 'Start billing, tracking inventory, and viewing reports.',
-              ),
-            ],
+          FadeInUp(
+            delay: const Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 600),
+            child: Wrap(
+              spacing: 40,
+              runSpacing: 40,
+              alignment: WrapAlignment.center,
+              children: [
+                _StepCard(
+                  step: '01',
+                  title: 'Create Account',
+                  desc: 'Create your supermarket account online in seconds.',
+                ),
+                _StepCard(
+                  step: '02',
+                  title: 'Add Data',
+                  desc: 'Add products, staff, and billing counters easily.',
+                ),
+                _StepCard(
+                  step: '03',
+                  title: 'Start Billing',
+                  desc:
+                      'Start billing, tracking inventory, and viewing reports.',
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -1201,40 +1167,51 @@ class BenefitsSection extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text(
-            'Designed for Local Supermarkets. Scalable Globally.',
-            textAlign: TextAlign.center,
-            style: GoogleFonts.poppins(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 24),
-          const SizedBox(
-            width: 800,
-            child: Text(
-              'Koutix is built with real supermarket workflows in mind and works seamlessly across India, UAE, and GCC countries.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.white70,
-                height: 1.6,
-              ),
+          FadeInUp(
+            duration: const Duration(milliseconds: 600),
+            child: Column(
+              children: [
+                Text(
+                  'Designed for Local Supermarkets. Scalable Globally.',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                const SizedBox(
+                  width: 800,
+                  child: Text(
+                    'Koutix is built with real supermarket workflows in mind and works seamlessly across India, UAE, and GCC countries.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white70,
+                      height: 1.6,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 60),
-          Wrap(
-            spacing: 24,
-            runSpacing: 24,
-            alignment: WrapAlignment.center,
-            children: const [
-              _BenefitTag('Fast Billing'),
-              _BenefitTag('Accurate Stocks'),
-              _BenefitTag('Clear Revenue Visiblity'),
-              _BenefitTag('Secure Cloud Access'),
-              _BenefitTag('Multi-Branch Support'),
-            ],
+          FadeInUp(
+            delay: const Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 600),
+            child: Wrap(
+              spacing: 24,
+              runSpacing: 24,
+              alignment: WrapAlignment.center,
+              children: const [
+                _BenefitTag('Fast Billing'),
+                _BenefitTag('Accurate Stocks'),
+                _BenefitTag('Clear Revenue Visiblity'),
+                _BenefitTag('Secure Cloud Access'),
+                _BenefitTag('Multi-Branch Support'),
+              ],
+            ),
           ),
         ],
       ),
@@ -1276,51 +1253,57 @@ class FinalCTASection extends StatelessWidget {
         vertical: 120,
         horizontal: getResponsiveHorizontalPadding(context),
       ),
-      color: Colors.white,
-      child: Column(
-        children: [
-          Text(
-            'Start Managing Your Supermarket Smarter Today',
-            textAlign: TextAlign.center,
-            style: GoogleFonts.poppins(
-              fontSize: 42,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-              letterSpacing: -1,
-            ),
-          ),
-          const SizedBox(height: 24),
-          const Text(
-            'Join supermarket owners who are switching to a faster, more reliable way to manage billing, inventory, and sales.',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20, color: Colors.black54),
-          ),
-          const SizedBox(height: 48),
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.secondaryColor,
-              foregroundColor: Colors.black,
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
-              textStyle: const TextStyle(
-                fontSize: 20,
+      // color: Colors.white, // Removed for global grid background
+      child: FadeInUp(
+        duration: const Duration(milliseconds: 600),
+        child: Column(
+          children: [
+            Text(
+              'Start Managing Your Supermarket Smarter Today',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.poppins(
+                fontSize: 42,
                 fontWeight: FontWeight.bold,
-              ),
-              elevation: 8,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                  100,
-                ), // Circle/Pill shape for button
+                color: Colors.black87,
+                letterSpacing: -1,
               ),
             ),
-            child: const Text('Create Free Supermarket Account'),
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'No setup fees. No long-term contracts.',
-            style: TextStyle(color: Colors.grey, fontSize: 14),
-          ),
-        ],
+            const SizedBox(height: 24),
+            const Text(
+              'Join supermarket owners who are switching to a faster, more reliable way to manage billing, inventory, and sales.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20, color: Colors.black54),
+            ),
+            const SizedBox(height: 48),
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.secondaryColor,
+                foregroundColor: Colors.black,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 24,
+                ),
+                textStyle: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+                elevation: 8,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    100,
+                  ), // Circle/Pill shape for button
+                ),
+              ),
+              child: const Text('Create Free Supermarket Account'),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'No setup fees. No long-term contracts.',
+              style: TextStyle(color: Colors.grey, fontSize: 14),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1362,6 +1345,188 @@ class LandingFooter extends StatelessWidget {
           const Text(
             '© 2026 Koutix. All rights reserved.',
             style: TextStyle(color: Colors.white24, fontSize: 12),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AnimatedHeroButton extends StatefulWidget {
+  final String title;
+  final VoidCallback? onPressed;
+  final bool isSmall;
+
+  const _AnimatedHeroButton({
+    this.title = 'Try it for Free',
+    this.onPressed,
+    this.isSmall = false,
+  });
+
+  @override
+  State<_AnimatedHeroButton> createState() => _AnimatedHeroButtonState();
+}
+
+class _AnimatedHeroButtonState extends State<_AnimatedHeroButton> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: widget.onPressed,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(100),
+            border: Border.all(
+              color: _isHovered ? AppTheme.primaryColor : Colors.grey.shade300,
+              width: 1.5,
+            ),
+            boxShadow: _isHovered
+                ? [
+                    BoxShadow(
+                      color: AppTheme.primaryColor.withOpacity(0.3),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ]
+                : [],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(100),
+            child: Stack(
+              children: [
+                // Flowing Background Fill
+                Positioned.fill(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return Stack(
+                        children: [
+                          AnimatedPositioned(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeOutCubic,
+                            left: 0,
+                            top: 0,
+                            bottom: 0,
+                            width: _isHovered ? constraints.maxWidth : 0,
+                            child: Container(color: AppTheme.primaryColor),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+                // Content
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: widget.isSmall ? 20 : 24,
+                    vertical: widget.isSmall ? 8 : 12,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AnimatedDefaultTextStyle(
+                        duration: const Duration(milliseconds: 300),
+                        style: TextStyle(
+                          fontSize: widget.isSmall ? 14 : 16,
+                          fontWeight: FontWeight.bold,
+                          color: _isHovered ? Colors.black : Colors.black87,
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                        ),
+                        child: Text(widget.title),
+                      ),
+                      SizedBox(width: widget.isSmall ? 8 : 16),
+                      // Circular Arrow
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _isHovered
+                              ? Colors.black
+                              : AppTheme.primaryColor,
+                        ),
+                        child: Icon(
+                          _isHovered
+                              ? Icons.arrow_outward
+                              : Icons.arrow_forward,
+                          size: widget.isSmall ? 14 : 16,
+                          color: _isHovered
+                              ? AppTheme.primaryColor
+                              : Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class GridPatternPainter extends CustomPainter {
+  const GridPatternPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint()
+      ..color = Colors.grey[100]!
+          .withValues(alpha: 0.7) // Darker and more visible
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 0.6; // Slightly thicker for visibility
+
+    double step = 10.0; // Minimal grid size
+
+    for (double x = 0; x < size.width; x += step) {
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
+    }
+
+    for (double y = 0; y < size.height; y += step) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
+}
+
+class Badge extends StatelessWidget {
+  final String text;
+  const Badge({super.key, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(100),
+        // border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SvgPicture.asset(
+            'assets/icons/koutixlogoonlyforwebsite.svg',
+            height: 12,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.secondaryColor,
+              letterSpacing: 1.2,
+            ),
           ),
         ],
       ),
