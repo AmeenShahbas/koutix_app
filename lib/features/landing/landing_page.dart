@@ -1043,6 +1043,8 @@ class HowItWorksSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDesktop = MediaQuery.of(context).size.width > 900;
+
     return Container(
       // color: const Color(0xFFF9FAFB), // Removed for global grid background
       padding: EdgeInsets.symmetric(
@@ -1050,53 +1052,104 @@ class HowItWorksSection extends StatelessWidget {
         horizontal: getResponsiveHorizontalPadding(context),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start, // Align to left like Hero
         children: [
           FadeInUp(
             duration: const Duration(milliseconds: 600),
             child: Column(
+              crossAxisAlignment:
+                  CrossAxisAlignment.start, // Align to left like Hero
               children: [
+                const Badge(text: 'HOW IT WORKS'), // Added Badge
+                const SizedBox(height: 24),
                 Text(
-                  'Get Started in 3 Simple Steps',
+                  'Get Started in\n3 Simple Steps', // Multi-line for impact
                   style: GoogleFonts.poppins(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    fontSize: 48, // Increased size like Hero
+                    height: 1.1,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.black,
+                    letterSpacing: -1.0,
                   ),
                 ),
-                const SizedBox(height: 16),
-                const Text(
-                  'No complex setup. No technical knowledge required.',
-                  style: TextStyle(fontSize: 18, color: Colors.black54),
+                const SizedBox(height: 24),
+                const SizedBox(
+                  // Constrain width for readability
+                  width: 600,
+                  child: Text(
+                    'No complex setup. No technical knowledge required. Just sign up and start managing your store.',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black54,
+                      height: 1.6,
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 60),
+          const SizedBox(height: 80), // Increased spacing
+
           FadeInUp(
             delay: const Duration(milliseconds: 300),
             duration: const Duration(milliseconds: 600),
-            child: Wrap(
-              spacing: 40,
-              runSpacing: 40,
-              alignment: WrapAlignment.center,
-              children: [
-                _StepCard(
-                  step: '01',
-                  title: 'Create Account',
-                  desc: 'Create your supermarket account online in seconds.',
-                ),
-                _StepCard(
-                  step: '02',
-                  title: 'Add Data',
-                  desc: 'Add products, staff, and billing counters easily.',
-                ),
-                _StepCard(
-                  step: '03',
-                  title: 'Start Billing',
-                  desc:
-                      'Start billing, tracking inventory, and viewing reports.',
-                ),
-              ],
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                if (isDesktop) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _StepCard(
+                        step: '01',
+                        title: 'Create Account',
+                        desc:
+                            'Create your supermarket account online in seconds.',
+                        isDesktop: true,
+                      ),
+                      _StepCard(
+                        step: '02',
+                        title: 'Add Data',
+                        desc:
+                            'Add products, staff, and billing counters easily.',
+                        isDesktop: true,
+                      ),
+                      _StepCard(
+                        step: '03',
+                        title: 'Start Billing',
+                        desc:
+                            'Start billing, tracking inventory, and viewing reports.',
+                        isDesktop: true,
+                      ),
+                    ],
+                  );
+                }
+
+                return Wrap(
+                  spacing: 40,
+                  runSpacing: 40,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    _StepCard(
+                      step: '01',
+                      title: 'Create Account',
+                      desc:
+                          'Create your supermarket account online in seconds.',
+                    ),
+                    _StepCard(
+                      step: '02',
+                      title: 'Add Data',
+                      desc: 'Add products, staff, and billing counters easily.',
+                    ),
+                    _StepCard(
+                      step: '03',
+                      title: 'Start Billing',
+                      desc:
+                          'Start billing, tracking inventory, and viewing reports.',
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         ],
@@ -1109,17 +1162,23 @@ class _StepCard extends StatelessWidget {
   final String step;
   final String title;
   final String desc;
+  final bool isDesktop;
+
   const _StepCard({
     required this.step,
     required this.title,
     required this.desc,
+    this.isDesktop = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 300,
+      width: isDesktop ? 350 : 300,
       child: Column(
+        crossAxisAlignment: isDesktop
+            ? CrossAxisAlignment.start
+            : CrossAxisAlignment.center,
         children: [
           Text(
             step,
@@ -1141,7 +1200,7 @@ class _StepCard extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             desc,
-            textAlign: TextAlign.center,
+            textAlign: isDesktop ? TextAlign.start : TextAlign.center,
             style: const TextStyle(
               fontSize: 16,
               color: Colors.black54,
