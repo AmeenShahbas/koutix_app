@@ -1062,9 +1062,9 @@ class HowItWorksSection extends StatelessWidget {
               children: [
                 const Badge(text: 'HOW IT WORKS'), // Added Badge
                 const SizedBox(height: 24),
-                Text(
+                const Text(
                   'Get Started in\n3 Simple Steps', // Multi-line for impact
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
                     fontSize: 48, // Increased size like Hero
                     height: 1.1,
                     fontWeight: FontWeight.w900,
@@ -1079,9 +1079,9 @@ class HowItWorksSection extends StatelessWidget {
                   child: Text(
                     'No complex setup. No technical knowledge required. Just sign up and start managing your store.',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 20,
                       color: Colors.black54,
-                      height: 1.6,
+                      height: 1.5,
                     ),
                   ),
                 ),
@@ -1317,46 +1317,33 @@ class FinalCTASection extends StatelessWidget {
         duration: const Duration(milliseconds: 600),
         child: Column(
           children: [
-            Text(
-              'Start Managing Your Supermarket Smarter Today',
+            const Text(
+              'Start Managing Your Supermarket\nSmarter Today',
               textAlign: TextAlign.center,
-              style: GoogleFonts.poppins(
-                fontSize: 42,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-                letterSpacing: -1,
+              style: TextStyle(
+                fontSize: 48,
+                height: 1.1,
+                fontWeight: FontWeight.w900,
+                color: Colors.black,
+                letterSpacing: -1.0,
               ),
             ),
             const SizedBox(height: 24),
-            const Text(
-              'Join supermarket owners who are switching to a faster, more reliable way to manage billing, inventory, and sales.',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20, color: Colors.black54),
-            ),
-            const SizedBox(height: 48),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.secondaryColor,
-                foregroundColor: Colors.black,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 40,
-                  vertical: 24,
-                ),
-                textStyle: const TextStyle(
+            const SizedBox(
+              width: 600,
+              child: Text(
+                'Join supermarket owners who are switching to a faster, more reliable way to manage billing, inventory, and sales.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
                   fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-                elevation: 8,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                    100,
-                  ), // Circle/Pill shape for button
+                  color: Colors.black54,
+                  height: 1.5,
                 ),
               ),
-              child: const Text('Create Free Supermarket Account'),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 48),
+            const _AnimatedHeroButton(title: 'Create Free Supermarket Account'),
+            const SizedBox(height: 24),
             const Text(
               'No setup fees. No long-term contracts.',
               style: TextStyle(color: Colors.grey, fontSize: 14),
