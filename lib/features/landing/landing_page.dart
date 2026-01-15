@@ -1360,40 +1360,296 @@ class LandingFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDesktop = MediaQuery.of(context).size.width > 900;
+    double horizontalPadding = getResponsiveHorizontalPadding(context);
+
     return Container(
-      padding: const EdgeInsets.all(60),
-      color: Colors.grey[900],
+      width: double.infinity,
+      decoration: const BoxDecoration(color: Color(0xFF0A0A0A)),
+      padding: EdgeInsets.fromLTRB(
+        horizontalPadding,
+        100,
+        horizontalPadding,
+        60,
+      ),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.storefront, color: Colors.white, size: 32),
-              const SizedBox(width: 12),
-              Text(
-                'Koutix',
-                style: GoogleFonts.poppins(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+          // --- Unified CTA Section ---
+          FadeInUp(
+            duration: const Duration(milliseconds: 600),
+            child: Column(
+              children: [
+                Text(
+                  'Start Managing Your Supermarket\nSmarter Today',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    fontSize: isDesktop ? 48 : 32,
+                    height: 1.1,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                    letterSpacing: -1.0,
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: 600,
+                  child: Text(
+                    'Join supermarket owners who are switching to a faster, more reliable way to manage billing, inventory, and sales.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey[400],
+                      height: 1.5,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 48),
+                Wrap(
+                  spacing: 20,
+                  runSpacing: 16,
+                  alignment: WrapAlignment.center,
+                  children: const [
+                    _StoreButton(
+                      icon: Icons.android,
+                      label: 'GET IT ON',
+                      storeName: 'Google Play',
+                    ),
+                    _StoreButton(
+                      icon: Icons.phone_iphone,
+                      label: 'Download on the',
+                      storeName: 'App Store',
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                // Removed "No setup fees..." text to match image cleanliness if desired,
+                // but adding it back to match previous unified version consistency.
+                Text(
+                  'No setup fees. No long-term contracts.',
+                  style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: 24),
-          const Text(
-            'Smart Supermarket Software for Growing Retail Businesses.',
-            style: TextStyle(color: Colors.white54),
-          ),
-          const SizedBox(height: 48),
+
+          const SizedBox(height: 120),
+
+          // --- Footer Links Section ---
+          isDesktop
+              ? Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(flex: 3, child: _FooterBrandColumn()),
+                    const SizedBox(width: 40),
+                    Expanded(
+                      child: _FooterLinkColumn(
+                        title: 'Quick Link',
+                        links: ['Home', 'Features', 'Benefits', 'Why Us'],
+                      ),
+                    ),
+                    Expanded(
+                      child: _FooterLinkColumn(
+                        title: 'Support',
+                        links: ['Contact Us', 'FAQs', 'Help Center'],
+                      ),
+                    ),
+                    Expanded(
+                      child: _FooterLinkColumn(
+                        title: 'Resources',
+                        links: [
+                          'Blog',
+                          'Privacy Policy',
+                          'Changelog',
+                          'Download',
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const _FooterBrandColumn(),
+                    const SizedBox(height: 60),
+                    Wrap(
+                      spacing: 40,
+                      runSpacing: 40,
+                      children: const [
+                        _FooterLinkColumn(
+                          title: 'Quick Link',
+                          links: ['Home', 'Features', 'Benefits', 'Why Us'],
+                        ),
+                        _FooterLinkColumn(
+                          title: 'Support',
+                          links: ['Contact Us', 'FAQs', 'Help Center'],
+                        ),
+                        _FooterLinkColumn(
+                          title: 'Resources',
+                          links: [
+                            'Blog',
+                            'Privacy Policy',
+                            'Changelog',
+                            'Download',
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+
+          // --- Footer Copyright Section ---
+          const SizedBox(height: 80),
           const Divider(color: Colors.white12),
           const SizedBox(height: 24),
           const Text(
             '© 2026 Koutix. All rights reserved.',
-            style: TextStyle(color: Colors.white24, fontSize: 12),
+            style: TextStyle(color: Colors.white24, fontSize: 14),
           ),
         ],
       ),
+    );
+  }
+}
+
+class _StoreButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String storeName;
+
+  const _StoreButton({
+    required this.icon,
+    required this.label,
+    required this.storeName,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: Colors.black, size: 32),
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black.withOpacity(0.8),
+                  height: 1,
+                ),
+              ),
+              Text(
+                storeName,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  height: 1.2,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FooterBrandColumn extends StatelessWidget {
+  const _FooterBrandColumn();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            const Icon(Icons.storefront, color: Colors.white, size: 32),
+            const SizedBox(width: 12),
+            Text(
+              'Koutix',
+              style: GoogleFonts.poppins(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 24),
+        Text(
+          'Improve collaboration, monitor progress in real-\ntime, and complete projects on time — all in one\nintuitive, easy-to-use dashboard.',
+          style: TextStyle(fontSize: 16, color: Colors.grey[400], height: 1.6),
+        ),
+        const SizedBox(height: 32),
+        Row(
+          children: const [
+            _SocialIcon(Icons.facebook),
+            SizedBox(width: 16),
+            _SocialIcon(Icons.camera_alt),
+            SizedBox(width: 16),
+            _SocialIcon(Icons.alternate_email),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _SocialIcon extends StatelessWidget {
+  final IconData icon;
+  const _SocialIcon(this.icon);
+
+  @override
+  Widget build(BuildContext context) {
+    return Icon(icon, color: Colors.grey[400], size: 24);
+  }
+}
+
+class _FooterLinkColumn extends StatelessWidget {
+  final String title;
+  final List<String> links;
+
+  const _FooterLinkColumn({required this.title, required this.links});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 24),
+        ...links.map(
+          (link) => Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: Text(
+              link,
+              style: TextStyle(
+                color: Colors.grey[400],
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
