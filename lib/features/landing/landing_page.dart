@@ -218,65 +218,102 @@ class _HeroContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: align,
         children: [
-          // Badge
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(100),
-              border: Border.all(color: AppTheme.primaryColor.withOpacity(0.3)),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.verified, size: 18, color: AppTheme.primaryColor),
-                const SizedBox(width: 8),
-                Text(
-                  '#1 Best Supermarket Software',
-                  style: GoogleFonts.poppins(
-                    color: AppTheme.primaryColor,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 32),
           // Headline
           Text(
-            'All-in-One Supermarket\nManagement App for\nProductive Teams',
+            'Supermarket Billing & Inventory Management Software',
             textAlign: textAlign,
-            style: const TextStyle(
+            style: GoogleFonts.poppins(
               fontSize: 48,
               height: 1.1,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w600,
               color: Colors.black,
-              letterSpacing: -1.0,
+              letterSpacing: -1.5,
             ),
           ),
           const SizedBox(height: 24),
-          // Subtext
+          // Subtext 1
           SizedBox(
             width: 600,
             child: Text(
-              'Improve collaboration, monitor progress in real-time, and complete billing on time — all in one intuitive, easy-to-use dashboard.',
+              'Manage billing, stock, staff, and sales in one smart web platform. Built for supermarkets and grocery stores across India & GCC.',
               textAlign: textAlign,
-              style: const TextStyle(
-                fontSize: 20,
-                color: Colors.black54,
-                height: 1.5,
+              style: GoogleFonts.inter(
+                fontSize: 18,
+                color: Colors.black87,
+                height: 1.6,
               ),
             ),
           ),
-          const SizedBox(height: 40),
+          // const SizedBox(height: 16),
+          // // Subtext 2
+          // SizedBox(
+          //   width: 600,
+          //   child: Text(
+          //     'Built for supermarkets, grocery stores, and retail chains looking for speed, accuracy, and control.',
+          //     textAlign: textAlign,
+          //     style: GoogleFonts.inter(
+          //       fontSize: 16,
+          //       color: Colors.black54,
+          //       height: 1.6,
+          //     ),
+          //   ),
+          // ),
+          const SizedBox(height: 48),
           // Buttons
           Wrap(
             spacing: 16,
             runSpacing: 16,
             alignment: centerAlign ? WrapAlignment.center : WrapAlignment.start,
-            children: [const _AnimatedHeroButton()],
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              const _AnimatedHeroButton(title: 'Create Account'),
+              OutlinedButton(
+                onPressed: () {},
+                style: OutlinedButton.styleFrom(
+                  fixedSize: const Size.fromHeight(56),
+                  padding: const EdgeInsets.symmetric(horizontal: 28),
+                  side: BorderSide(color: Colors.grey.shade300, width: 1.5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  foregroundColor: Colors.black,
+                  backgroundColor: Colors.white,
+                  elevation: 0,
+                  overlayColor: Colors.black.withOpacity(0.05),
+                ),
+                child: Text(
+                  'Book Free Demo',
+                  style: GoogleFonts.inter(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
           ),
+          const SizedBox(height: 40),
+          // SEO Microcopy
+          // Row(
+          //   mainAxisSize: MainAxisSize.min,
+          //   mainAxisAlignment: centerAlign
+          //       ? MainAxisAlignment.center
+          //       : MainAxisAlignment.start,
+          //   children: [
+          //     Icon(Icons.check_circle, size: 20, color: Colors.green[600]),
+          //     const SizedBox(width: 12),
+          //     Flexible(
+          //       child: Text(
+          //         'Trusted by modern supermarkets across India and the Middle East.',
+          //         style: GoogleFonts.inter(
+          //           fontSize: 14,
+          //           color: Colors.grey[600],
+          //           fontWeight: FontWeight.w500,
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
         ],
       ),
     );
@@ -292,105 +329,7 @@ class _HeroImageComposition extends StatelessWidget {
       delay: const Duration(milliseconds: 400),
       duration: const Duration(milliseconds: 600),
       curve: Curves.easeOut,
-      child: RepaintBoundary(
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            // Laptop / Web Dashboard Mockup (Back Layer)
-            Transform.translate(
-              offset: const Offset(40, 0),
-              child: Container(
-                height: 480,
-                width: 720,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.zero, // Removed border radius
-                  border: Border.all(color: Colors.grey[200]!, width: 4),
-                  // boxShadow: [
-                  //   BoxShadow(
-                  //     color: Colors.black.withOpacity(0.1),
-                  //     blurRadius: 50,
-                  //     offset: const Offset(0, 20),
-                  //   ),
-                  // ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.zero,
-                  child: Column(
-                    children: [
-                      // Browser Bar
-                      Container(
-                        height: 30,
-                        color: Colors.grey[100],
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              radius: 4,
-                              backgroundColor: Colors.red[200],
-                            ),
-                            const SizedBox(width: 6),
-                            CircleAvatar(
-                              radius: 4,
-                              backgroundColor: Colors.orange[200],
-                            ),
-                            const SizedBox(width: 6),
-                            CircleAvatar(
-                              radius: 4,
-                              backgroundColor: Colors.green[200],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Center(
-                          child: Text(
-                            "Web Admin Dashboard",
-                            style: TextStyle(color: Colors.grey[300]),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
-            // Mobile App Mockup (Front Layer)
-            Transform.translate(
-              offset: const Offset(-180, 80),
-              child: Container(
-                height: 480,
-                width: 240,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.zero, // Removed border radius
-                  // boxShadow: [
-                  //   BoxShadow(
-                  //     color: Colors.black.withOpacity(0.2),
-                  //     blurRadius: 40,
-                  //     offset: const Offset(0, 20),
-                  //   ),
-                  // ],
-                ),
-                padding: const EdgeInsets.all(12),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.zero,
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Partner App",
-                      style: TextStyle(color: Colors.grey[300]),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+      child: Image.asset('assets/images/heroimage.png', fit: BoxFit.contain),
     );
   }
 }
@@ -416,7 +355,7 @@ class TrustedBySection extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
-                color: Colors.grey[400],
+                color: Colors.grey[600],
                 letterSpacing: 1.2,
               ),
             ),
@@ -580,10 +519,10 @@ class WhyChooseSection extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Badge(text: 'SIMPLIFY DAILY OPERATIONS'),
+                        const Badge(text: 'WHY SUPERMARKETS CHOOSE KOUTIX'),
                         const SizedBox(height: 24),
                         const Text(
-                          'Because your store\ndeserves more than\njust a Billing Machine',
+                          'Simplify Daily \nSupermarket Operations',
                           style: TextStyle(
                             fontSize: 48,
                             height: 1.1,
@@ -605,7 +544,7 @@ class WhyChooseSection extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Text(
-                        'Our platform goes beyond basic billing to give you full visibility and control. Manage inventory, align your staff, and deliver meaningful results.',
+                        'Managing a supermarket should not require multiple systems, manual registers, or guesswork.',
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.grey[600],
@@ -623,10 +562,10 @@ class WhyChooseSection extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Badge(text: 'SIMPLIFY DAILY OPERATIONS'),
+                  const Badge(text: 'WHY SUPERMARKETS CHOOSE KOUTIX'),
                   const SizedBox(height: 24),
                   const Text(
-                    'Because your store\ndeserves more than\njust a Billing Machine',
+                    'Simplify Daily \nSupermarket Operations',
                     style: TextStyle(
                       fontSize: 40,
                       height: 1.1,
@@ -637,7 +576,7 @@ class WhyChooseSection extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    'Our platform goes beyond basic billing to give you full visibility and control. Manage inventory, align your staff, and deliver meaningful results.',
+                    'Managing a supermarket should not require multiple systems, manual registers, or guesswork.',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey[600],
@@ -651,58 +590,87 @@ class WhyChooseSection extends StatelessWidget {
           const SizedBox(height: 80),
 
           // Cards Grid
+          // Subheader
+          FadeInUp(
+            delay: const Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 600),
+            child: Text(
+              'Koutix helps supermarket owners:',
+              style: GoogleFonts.poppins(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+            ),
+          ),
+          const SizedBox(height: 32),
+
+          // Cards Grid
           LayoutBuilder(
             builder: (context, constraints) {
-              // Calculate dynamic width to fill the container like the Stats Banner
-              // 3 cards with 24px spacing between them
-              double cardWidth = (constraints.maxWidth - (24 * 2)) / 3;
-              // Responsive fallback: if card becomes too small (< 300), switch to wrap logic or full width
-              if (cardWidth < 300) {
-                cardWidth = constraints.maxWidth; // Stack vertically on mobile
-              }
+              // On desktop, 2 columns. On mobile, 1 column.
+              final bool isDesktop = constraints.maxWidth > 768;
+              final double itemWidth = isDesktop
+                  ? (constraints.maxWidth - 24) / 2
+                  : constraints.maxWidth;
 
               return Wrap(
                 spacing: 24,
-                runSpacing: 24,
-                alignment: WrapAlignment
-                    .start, // Start alignment works better when filling width
+                runSpacing: 16,
                 children: [
                   FadeInUp(
-                    delay: const Duration(milliseconds: 300),
-                    duration: const Duration(milliseconds: 600),
-                    child: _FeatureCard(
-                      width: cardWidth,
-                      icon: Icons.grid_view_rounded,
-                      title: 'All-in-One Workspace',
-                      description:
-                          'Manage tasks, documents, timelines, and teams in one platform.',
+                    delay: const Duration(milliseconds: 400),
+                    child: _CompactFeatureItem(
+                      width: itemWidth,
+                      icon: Icons.timer_off_rounded,
+                      text: 'Reduce billing delays and checkout queues',
                     ),
                   ),
                   FadeInUp(
                     delay: const Duration(milliseconds: 500),
-                    duration: const Duration(milliseconds: 600),
-                    child: _FeatureCard(
-                      width: cardWidth,
-                      icon: Icons.auto_graph_rounded,
-                      title: 'Real-Time Progress Tracking',
-                      description:
-                          'Monitor the progress of each project visually with interactive charts.',
+                    child: _CompactFeatureItem(
+                      width: itemWidth,
+                      icon: Icons.inventory_2_rounded,
+                      text: 'Maintain accurate inventory levels',
+                    ),
+                  ),
+                  FadeInUp(
+                    delay: const Duration(milliseconds: 600),
+                    child: _CompactFeatureItem(
+                      width: itemWidth,
+                      icon: Icons.trending_up_rounded,
+                      text: 'Track daily sales and profits in real time',
                     ),
                   ),
                   FadeInUp(
                     delay: const Duration(milliseconds: 700),
-                    duration: const Duration(milliseconds: 600),
-                    child: _FeatureCard(
-                      width: cardWidth,
-                      icon: Icons.pie_chart_rounded,
-                      title: 'Insights & Reports',
-                      description:
-                          'Automatic reports on project performance & team productivity.',
+                    child: _CompactFeatureItem(
+                      width: itemWidth,
+                      icon: Icons.admin_panel_settings_rounded,
+                      text: 'Manage staff access and counters securely',
                     ),
                   ),
                 ],
               );
             },
+          ),
+
+          const SizedBox(height: 48),
+
+          // Concluding Text
+          FadeInUp(
+            delay: const Duration(milliseconds: 800),
+            child: Center(
+              child: Text(
+                'All from a single, easy-to-use web application.',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black54,
+                ),
+              ),
+            ),
           ),
 
           const SizedBox(height: 80),
@@ -739,6 +707,62 @@ class WhyChooseSection extends StatelessWidget {
                     label: 'User Rating',
                   ),
                 ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CompactFeatureItem extends StatelessWidget {
+  final double width;
+  final IconData icon;
+  final String text;
+
+  const _CompactFeatureItem({
+    required this.width,
+    required this.icon,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: AppTheme.primaryColor.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: Colors.black87, size: 24),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              text,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+                height: 1.4,
               ),
             ),
           ),
@@ -899,55 +923,134 @@ class FeaturesSection extends StatelessWidget {
         horizontal: getResponsiveHorizontalPadding(context),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Header
+          // Header
           FadeInUp(
             duration: const Duration(milliseconds: 600),
-            child: Text(
-              'Complete Supermarket Management',
-              style: GoogleFonts.poppins(
-                fontSize: 36,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
+            child: const StickyTextContent(),
           ),
           const SizedBox(height: 60),
+
+          // New Horizontal Card Container
           FadeInUp(
             delay: const Duration(milliseconds: 200),
             duration: const Duration(milliseconds: 600),
-            child: _LargeFeatureRow(
-              reversed: false,
-              imageColor: Colors.blue[50]!,
-              title: 'Fast & Reliable Billing',
-              subtitle:
-                  'Process customer bills quickly with a stable, secure billing system designed for high-volume supermarket counters.',
-              icon: Icons.receipt,
-            ),
-          ),
-          const SizedBox(height: 80),
-          FadeInUp(
-            delay: const Duration(milliseconds: 400),
-            duration: const Duration(milliseconds: 600),
-            child: _LargeFeatureRow(
-              reversed: true,
-              imageColor: Colors.green[50]!,
-              title: 'Inventory & Stock Control',
-              subtitle:
-                  'Track stock movement in real time, monitor low-stock items, and prevent over-ordering or wastage.',
-              icon: Icons.inventory,
-            ),
-          ),
-          const SizedBox(height: 80),
-          FadeInUp(
-            delay: const Duration(milliseconds: 600),
-            duration: const Duration(milliseconds: 600),
-            child: _LargeFeatureRow(
-              reversed: false,
-              imageColor: Colors.orange[50]!,
-              title: 'Business Insights',
-              subtitle:
-                  'View daily, weekly, and monthly sales reports to understand performance and make better business decisions.',
-              icon: Icons.bar_chart,
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(48),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(32),
+                border: Border.all(color: Colors.grey.shade300),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.02),
+                    blurRadius: 24,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
+              ),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final isDesktop = constraints.maxWidth > 900;
+
+                  if (!isDesktop) {
+                    return Column(
+                      children: [
+                        _DesignCardItem(
+                          icon: Icons.receipt_long_rounded,
+                          title: 'Fast & Reliable Billing Software',
+                          description:
+                              'Process customer bills quickly with a stable, secure billing system designed for high-volume supermarket counters.',
+                        ),
+                        Divider(height: 60, color: Colors.grey.shade300),
+                        _DesignCardItem(
+                          icon: Icons.inventory_2_rounded,
+                          title: 'Inventory & Stock Management',
+                          description:
+                              'Track stock movement in real time, monitor low-stock items, and prevent over-ordering or wastage.',
+                        ),
+                        Divider(height: 60, color: Colors.grey.shade300),
+                        _DesignCardItem(
+                          icon: Icons.people_alt_rounded,
+                          title: 'Staff & Counter Management',
+                          description:
+                              'Assign staff roles, manage counters, and control access levels with full transparency.',
+                        ),
+                        Divider(height: 60, color: Colors.grey.shade300),
+                        _DesignCardItem(
+                          icon: Icons.insights_rounded,
+                          title: 'Sales Reports & Business Insights',
+                          description:
+                              'View daily, weekly, and monthly sales reports to understand performance and make better business decisions.',
+                        ),
+                      ],
+                    );
+                  }
+
+                  return Column(
+                    children: [
+                      IntrinsicHeight(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: _DesignCardItem(
+                                icon: Icons.receipt_long_rounded,
+                                title: 'Fast & Reliable Billing Software',
+                                description:
+                                    'Process customer bills quickly with a stable, secure billing system designed for high-volume supermarket counters.',
+                              ),
+                            ),
+                            VerticalDivider(
+                              width: 60,
+                              color: Colors.grey.shade300,
+                            ),
+                            Expanded(
+                              child: _DesignCardItem(
+                                icon: Icons.inventory_2_rounded,
+                                title: 'Inventory & Stock Management',
+                                description:
+                                    'Track stock movement in real time, monitor low-stock items, and prevent over-ordering or wastage.',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Divider(height: 60, color: Colors.grey.shade300),
+                      IntrinsicHeight(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: _DesignCardItem(
+                                icon: Icons.people_alt_rounded,
+                                title: 'Staff & Counter Management',
+                                description:
+                                    'Assign staff roles, manage counters, and control access levels with full transparency.',
+                              ),
+                            ),
+                            VerticalDivider(
+                              width: 60,
+                              color: Colors.grey.shade300,
+                            ),
+                            Expanded(
+                              child: _DesignCardItem(
+                                icon: Icons.insights_rounded,
+                                title: 'Sales Reports & Business Insights',
+                                description:
+                                    'View daily, weekly, and monthly sales reports to understand performance and make better business decisions.',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
           ),
         ],
@@ -956,84 +1059,229 @@ class FeaturesSection extends StatelessWidget {
   }
 }
 
-class _LargeFeatureRow extends StatelessWidget {
-  final bool reversed;
-  final Color imageColor;
-  final String title;
-  final String subtitle;
-  final IconData icon;
+class StickyTextContent extends StatelessWidget {
+  const StickyTextContent({super.key});
 
-  const _LargeFeatureRow({
-    required this.reversed,
-    required this.imageColor,
-    required this.title,
-    required this.subtitle,
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Badge
+        const Badge(text: 'FEATURES'),
+        const SizedBox(height: 32),
+        Text(
+          'Complete Supermarket\nManagement System',
+          style: GoogleFonts.poppins(
+            fontSize: 48, // Slightly adjusted for longer text
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+            height: 1.1,
+            letterSpacing: -1.5,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class StackingCardsList extends StatelessWidget {
+  const StackingCardsList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _StackInfoCard(
+          index: 0,
+          color: Colors.blue[500]!,
+          icon: Icons.receipt_long_rounded,
+          title: 'Fast & Reliable Billing Software',
+          description:
+              'Process customer bills quickly with a stable, secure billing system designed for high-volume supermarket counters.',
+          chartData: const [0.3, 0.5, 0.4, 0.7, 0.6, 0.8, 0.5],
+        ),
+        _StackInfoCard(
+          index: 1,
+          color: Colors.green[500]!, // Green for inventory
+          icon: Icons.inventory_2_rounded,
+          title: 'Inventory & Stock Management',
+          description:
+              'Track stock movement in real time, monitor low-stock items, and prevent over-ordering or wastage.',
+          topOffset: -40, // Stacking effect
+          chartData: const [0.5, 0.6, 0.8, 0.4, 0.7, 0.5, 0.6],
+        ),
+        _StackInfoCard(
+          index: 2,
+          color: Colors.orange[500]!, // Orange for staff
+          icon: Icons.people_alt_rounded,
+          title: 'Staff & Counter Management',
+          description:
+              'Assign staff roles, manage counters, and control access levels with full transparency.',
+          topOffset: -40, // Stacking effect
+          chartData: const [0.2, 0.4, 0.3, 0.5, 0.4, 0.6, 0.4],
+        ),
+        _StackInfoCard(
+          index: 3,
+          color: Colors.purple[500]!, // Purple for insights
+          icon: Icons.insights_rounded,
+          title: 'Sales Reports & Business Insights',
+          description:
+              'View daily, weekly, and monthly sales reports to understand performance and make better business decisions.',
+          topOffset: -40, // Stacking effect
+          chartData: const [0.4, 0.6, 0.5, 0.8, 0.9, 0.7, 0.9],
+        ),
+      ],
+    );
+  }
+}
+
+class _StackInfoCard extends StatelessWidget {
+  final int index;
+  final Color color;
+  final IconData icon;
+  final String title;
+  final String description;
+  final double topOffset;
+  final List<double> chartData;
+
+  const _StackInfoCard({
+    required this.index,
+    required this.color,
     required this.icon,
+    required this.title,
+    required this.description,
+    this.topOffset = 0,
+    required this.chartData,
   });
 
   @override
   Widget build(BuildContext context) {
-    final textContent = Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: AppTheme.primaryColor,
-              borderRadius: BorderRadius.circular(100), // Circle like button
-            ),
-            child: Icon(icon, color: Colors.white, size: 28),
+    return FadeInUp(
+      delay: Duration(milliseconds: 200 * index), // Staggered
+      duration: const Duration(milliseconds: 800),
+      from: 100, // Slide up from further down
+      child: Transform.translate(
+        offset: Offset(0, topOffset),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(40),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF9FAFB), // Very light grey background
+            borderRadius: BorderRadius.circular(32),
+            border: Border.all(color: Colors.white),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.04),
+                blurRadius: 40,
+                offset: const Offset(0, 10),
+              ),
+            ],
           ),
-          const SizedBox(height: 24),
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: color,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(icon, color: Colors.white, size: 20),
+                  ),
+                  const SizedBox(width: 16),
+                  Text(
+                    title,
+                    style: GoogleFonts.poppins(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                description,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black54,
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 32),
+              // Mini Chart visual
+              SizedBox(
+                height: 60,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: chartData.map((e) {
+                    return Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: Container(
+                          height: 60 * e,
+                          decoration: BoxDecoration(
+                            color: color.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 16),
-          Text(
-            subtitle,
-            style: const TextStyle(
-              fontSize: 18,
-              color: Colors.black54,
-              height: 1.6,
-            ),
-          ),
-        ],
+        ),
       ),
     );
+  }
+}
 
-    final imageContent = Expanded(
-      child: Container(
-        height: 400,
-        decoration: BoxDecoration(
-          color: imageColor,
-          borderRadius: BorderRadius.zero, // Removed border radius
-        ),
-        // Placeholder for feature image
-        child: Center(
-          child: Icon(Icons.image, size: 64, color: Colors.black12),
-        ),
-      ),
-    );
+class _DesignCardItem extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String description;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxWidth < 900) {
-          return Column(
-            children: [imageContent, const SizedBox(height: 40), textContent],
-          );
-        }
-        return Row(
-          children: reversed
-              ? [textContent, const SizedBox(width: 60), imageContent]
-              : [imageContent, const SizedBox(width: 60), textContent],
-        );
-      },
+  const _DesignCardItem({
+    required this.icon,
+    required this.title,
+    required this.description,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.black, // Dark circle as per image
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: Colors.white, size: 24),
+        ),
+        const SizedBox(height: 24),
+        Text(
+          title,
+          style: GoogleFonts.poppins(
+            fontSize: 24,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+            height: 1.2,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          description,
+          style: TextStyle(fontSize: 16, color: Colors.grey[600], height: 1.5),
+        ),
+      ],
     );
   }
 }
@@ -1379,25 +1627,25 @@ class LandingFooter extends StatelessWidget {
             duration: const Duration(milliseconds: 600),
             child: Column(
               children: [
-                Text(
-                  'Start Managing Your Supermarket\nSmarter Today',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
-                    fontSize: isDesktop ? 48 : 32,
-                    height: 1.1,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                    letterSpacing: -1.0,
-                  ),
-                ),
-                const SizedBox(height: 24),
+                // Text(
+                //   'Start Managing Your Supermarket\nSmarter Today',
+                //   textAlign: TextAlign.center,
+                //   style: GoogleFonts.poppins(
+                //     fontSize: isDesktop ? 48 : 32,
+                //     height: 1.1,
+                //     fontWeight: FontWeight.w600,
+                //     color: Colors.white,
+                //     letterSpacing: -1.0,
+                //   ),
+                // ),
+                // const SizedBox(height: 24),
                 SizedBox(
                   width: 600,
                   child: Text(
-                    'Join supermarket owners who are switching to a faster, more reliable way to manage billing, inventory, and sales.',
+                    'Koutix is a modern supermarket billing software, inventory management system, and grocery store management solution designed to help retailers improve efficiency, accuracy, and profitability.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 20,
                       color: Colors.grey[400],
                       height: 1.5,
                     ),
@@ -1759,7 +2007,7 @@ class _AnimatedHeroButtonState extends State<_AnimatedHeroButton> {
                           size: widget.isSmall ? 14 : 16,
                           color: _isHovered
                               ? AppTheme.primaryColor
-                              : Colors.white,
+                              : Colors.black,
                         ),
                       ),
                     ],
