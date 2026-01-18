@@ -1433,7 +1433,7 @@ class _StepCard extends StatelessWidget {
             style: GoogleFonts.poppins(
               fontSize: 80,
               fontWeight: FontWeight.bold,
-              color: Colors.grey[200],
+              color: Colors.grey[500],
               height: 1,
             ),
           ),
@@ -1467,7 +1467,13 @@ class BenefitsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppTheme.primaryColor,
+      margin: EdgeInsets.symmetric(
+        horizontal: getResponsiveHorizontalPadding(context),
+      ),
+      decoration: BoxDecoration(
+        color: AppTheme.primaryColor,
+        borderRadius: BorderRadius.circular(32),
+      ),
       padding: EdgeInsets.symmetric(
         vertical: 100,
         horizontal: getResponsiveHorizontalPadding(context),
@@ -1484,7 +1490,7 @@ class BenefitsSection extends StatelessWidget {
                   style: GoogleFonts.poppins(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: AppTheme.secondaryColor,
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -1495,7 +1501,7 @@ class BenefitsSection extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18,
-                      color: Colors.white70,
+                      color: AppTheme.secondaryColor,
                       height: 1.6,
                     ),
                   ),
@@ -1512,11 +1518,15 @@ class BenefitsSection extends StatelessWidget {
               runSpacing: 24,
               alignment: WrapAlignment.center,
               children: const [
-                _BenefitTag('Fast Billing'),
-                _BenefitTag('Accurate Stocks'),
-                _BenefitTag('Clear Revenue Visiblity'),
-                _BenefitTag('Secure Cloud Access'),
-                _BenefitTag('Multi-Branch Support'),
+                _BenefitTag('Fast Billing and reduced customer waiting time'),
+                _BenefitTag('Accurate Stocks records across all products'),
+                _BenefitTag(
+                  'Clear visibility on Revenue, margins,and performance',
+                ),
+                _BenefitTag('Secure Cloud-based Access from anywhare'),
+                _BenefitTag(
+                  'Suitable for single stores andMulti-Branch Supermarkets',
+                ),
               ],
             ),
           ),
@@ -1542,7 +1552,7 @@ class _BenefitTag extends StatelessWidget {
       child: Text(
         text,
         style: const TextStyle(
-          color: Colors.white,
+          color: AppTheme.secondaryColor,
           fontWeight: FontWeight.w600,
         ),
       ),
@@ -1820,23 +1830,14 @@ class _FooterBrandColumn extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            const Icon(Icons.storefront, color: Colors.white, size: 32),
-            const SizedBox(width: 12),
-            Text(
-              'Koutix',
-              style: GoogleFonts.poppins(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+        SvgPicture.asset(
+          'assets/icons/logowithoutbg.svg',
+          height: 40,
+          colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
         ),
         const SizedBox(height: 24),
         Text(
-          'Improve collaboration, monitor progress in real-\ntime, and complete projects on time — all in one\nintuitive, easy-to-use dashboard.',
+          'Koutix — Smart Supermarket Software for Growing Retail Businesses',
           style: TextStyle(fontSize: 16, color: Colors.grey[400], height: 1.6),
         ),
         const SizedBox(height: 32),
