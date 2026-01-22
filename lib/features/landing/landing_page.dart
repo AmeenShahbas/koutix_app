@@ -5,6 +5,7 @@ import 'package:koutix_app/core/theme/app_theme.dart';
 import 'package:koutix_app/features/admin/dashboard/dashboard_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:ui'; // Added for Glassmorphism
+import '../../auth/login_screen.dart';
 
 double getResponsiveHorizontalPadding(BuildContext context) {
   double width = MediaQuery.of(context).size.width;
@@ -494,7 +495,17 @@ class _HeroContent extends StatelessWidget {
             alignment: centerAlign ? WrapAlignment.center : WrapAlignment.start,
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              const _AnimatedHeroButton(title: 'Create Account'),
+              _AnimatedHeroButton(
+                title: 'Create Account',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ),
+                  );
+                },
+              ),
               OutlinedButton(
                 onPressed: () {},
                 style: OutlinedButton.styleFrom(
