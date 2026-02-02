@@ -5,7 +5,7 @@ import 'dart:math' as math;
 import 'dart:ui'; // For ImageFilter
 import '../core/theme/app_theme.dart';
 import '../core/services/auth_service.dart';
-import 'supermarket_onboarding_screen.dart';
+import 'sign_up_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -278,8 +278,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SupermarketOnboardingScreen(),
+                                    builder: (context) => const SignUpScreen(),
                                   ),
                                 );
                               },
@@ -353,7 +352,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _handleLogin() async {
     final email = _handleController.text.trim();
-    if (email.isEmpty || _passwordController.text.isEmpty) {
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -369,28 +370,32 @@ class _LoginScreenState extends State<LoginScreen> {
 
     setState(() => _isLoading = true);
     try {
-      final response = await _authService.login(
-        email,
-        _passwordController.text,
-      );
+      final response = await _authService.login(email, password);
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Login Successful: ${response['message'] ?? 'Welcome Back!'}',
+              'Login Successful: Welcome Back!',
               style: GoogleFonts.inter(color: Colors.black),
             ),
             backgroundColor: AppTheme.primaryColor,
             behavior: SnackBarBehavior.floating,
           ),
         );
+
+        // TODO: Navigate based on user role
+        // final role = response['user']['role'];
+        // if (role == 'ChainManager') Navigator.pushReplacement(context, ...);
+        // else if (role == 'BranchManager') Navigator.pushReplacement(context, ...);
       }
     } catch (e) {
       if (mounted) {
+        String errorMessage = e.toString().replaceFirst('Exception: ', '');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              e.toString(),
+              errorMessage,
               style: GoogleFonts.inter(color: Colors.white),
             ),
             backgroundColor: Colors.red.shade900,

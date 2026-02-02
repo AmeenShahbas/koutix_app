@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "399645935240",
+    "project_id": "koutix-57444",
+    "storage_bucket": "koutix-57444.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:399645935240:android:2a8cd8582ce1a526a1c13d",
+        "android_client_info": {
+          "package_name": "com.example.koutix_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJkB-mDgl-T3sMvjVeorq2TX6aIroX8cE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
