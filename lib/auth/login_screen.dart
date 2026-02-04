@@ -6,6 +6,7 @@ import 'dart:ui'; // For ImageFilter
 import '../core/theme/app_theme.dart';
 import '../core/services/auth_service.dart';
 import 'sign_up_screen.dart';
+import '../features/super_admin/dashboard/super_admin_dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -384,10 +385,12 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         );
 
-        // TODO: Navigate based on user role
-        // final role = response['user']['role'];
-        // if (role == 'ChainManager') Navigator.pushReplacement(context, ...);
-        // else if (role == 'BranchManager') Navigator.pushReplacement(context, ...);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SuperAdminDashboardScreen(),
+          ),
+        );
       }
     } catch (e) {
       if (mounted) {
