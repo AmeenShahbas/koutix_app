@@ -2,8 +2,12 @@ import 'dart:ui';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:io' show File;
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:image_picker/image_picker.dart';
 import '../core/theme/app_theme.dart';
 import '../core/services/auth_service.dart';
+import '../core/services/cloudinary_service.dart';
 import 'package:country_picker/country_picker.dart';
 import 'login_screen.dart';
 
@@ -43,7 +47,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _vatTrnController = TextEditingController();
   final _hqAddressController = TextEditingController();
   final _tradeLicenseController = TextEditingController();
-  final _tokenController = TextEditingController(); // Only for Branch Managers
+  final _tokenController =
+      TextEditingController(); // Only for Invited Branch Managers
+
+  // New Controllers for Branch/Independent Signup
+  final _branchNameController = TextEditingController();
+  final _addressController = TextEditingController(); // Specific store address
+  final _logoUrlController = TextEditingController();
+  final _primaryColorController = TextEditingController(text: "#FF6B35");
+  final _expectedBranchCountController = TextEditingController(text: "1");
+
+  // Image Upload State
+  // Image Upload State
+  XFile? _logoImageFile; // Use XFile for cross-platform support
+  final ImagePicker _picker = ImagePicker();
+  final CloudinaryService _cloudinaryService = CloudinaryService();
+
+  String _selectedPosSystem = 'Custom';
+  final List<String> _posOptions = ['SAP', 'Zoho', 'Custom'];
 
   @override
   void dispose() {
@@ -56,6 +77,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _hqAddressController.dispose();
     _tradeLicenseController.dispose();
     _tokenController.dispose();
+    _branchNameController.dispose();
+    _addressController.dispose();
+    _logoUrlController.dispose();
+    _primaryColorController.dispose();
+    _expectedBranchCountController.dispose();
     super.dispose();
   }
 
@@ -65,12 +91,50 @@ class _SignUpScreenState extends State<SignUpScreen> {
     setState(() => _isLoading = true);
     try {
       if (_isBranchManagerMode) {
-        await _authService.completeOnboarding(
-          token: _tokenController.text.trim(),
+        // Construct E.164 phone number: +PhoneCodePhoneNumber
+        String localNumber = _phoneController.text.trim();
+
+        // Remove all non-numeric characters
+        localNumber = localNumber.replaceAll(RegExp(r'\D'), '');
+
+        // If the number starts with the country code (e.g. 971...), remove it
+        if (localNumber.startsWith(_selectedCountry.phoneCode)) {
+          localNumber = localNumber.substring(
+            _selectedCountry.phoneCode.length,
+          );
+        }
+
+        // Remove any leading zeros (e.g. 050... -> 50...)
+        localNumber = localNumber.replaceAll(RegExp(r'^0+'), '');
+
+        final fullPhone = '+${_selectedCountry.phoneCode}$localNumber';
+        debugPrint('Formatted Phone for Signup: $fullPhone');
+
+        if (_logoImageFile != null) {
+          final logoUrl = await _cloudinaryService.uploadLogo(_logoImageFile!);
+          if (logoUrl != null) {
+            _logoUrlController.text = logoUrl;
+          } else {
+            throw Exception('Failed to upload logo image');
+          }
+        }
+
+        await _authService.signupBranchManager(
+          email: _emailController.text.trim(),
           password: _passwordController.text,
-          displayName: _nameController.text.trim(),
+          fullName: _nameController.text.trim(),
+          phoneNumber: fullPhone,
+          branchName: _branchNameController.text.trim(),
+          address: _addressController.text.trim(),
+          vatTrn: _vatTrnController.text.trim(),
+          tradeLicense: _tradeLicenseController.text.trim(),
+          logoUrl: _logoUrlController.text.trim(),
+          primaryColor: _primaryColorController.text.trim(),
+          expectedBranchCount:
+              int.tryParse(_expectedBranchCountController.text) ?? 1,
+          posSystem: _selectedPosSystem,
         );
-        _showSuccess('Account Created Successfully!');
+        _showSuccess('Branch Signup Successful! Check your email.');
       } else {
         // Construct E.164 phone number: +PhoneCodePhoneNumber
         // Remove all non-numeric characters first
@@ -230,7 +294,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         const SizedBox(height: 12),
         Text(
           _isBranchManagerMode
-              ? 'Complete your profile to access your designated branch.'
+              ? 'Register your branch or independent store.'
               : 'Fill in the professional details to register your supermarket chain.',
           style: GoogleFonts.inter(color: Colors.white54, fontSize: 15),
           textAlign: TextAlign.center,
@@ -287,29 +351,115 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget _buildBranchManagerForm() {
-    return _buildGlassSection(
-      title: 'Branch Access',
+    return Column(
       children: [
-        _buildLabel('Invitation Token *'),
-        _buildTextField(
-          _tokenController,
-          'Enter token from your email',
-          validator: (v) => v!.isEmpty ? 'Token required' : null,
+        _buildGlassSection(
+          title: 'Store & Location',
+          children: [
+            _buildLabel('Store / Branch Name *'),
+            _buildTextField(
+              _branchNameController,
+              'e.g. Nesto Al-Nud',
+              validator: (v) => v!.isEmpty ? 'Store name required' : null,
+            ),
+            const SizedBox(height: 24),
+            _buildLabel('Address *'),
+            _buildTextField(
+              _addressController,
+              'e.g. Sharjah, UAE',
+              validator: (v) => v!.isEmpty ? 'Address required' : null,
+            ),
+            const SizedBox(height: 24),
+            _buildLabel('Expected Branch Count'),
+            _buildTextField(
+              _expectedBranchCountController,
+              '1',
+              validator: (v) => v!.isEmpty ? 'Required' : null,
+            ),
+          ],
         ),
         const SizedBox(height: 24),
-        _buildLabel('Master Admin Name *'),
-        _buildTextField(
-          _nameController,
-          'Enter your full name',
-          validator: (v) => v!.isEmpty ? 'Name required' : null,
+        _buildGlassSection(
+          title: 'Manager Details',
+          children: [
+            _buildLabel('Full Name *'),
+            _buildTextField(
+              _nameController,
+              'Alice Smith',
+              validator: (v) => v!.isEmpty ? 'Name required' : null,
+            ),
+            const SizedBox(height: 24),
+            _buildLabel('Work Email *'),
+            _buildTextField(
+              _emailController,
+              'manager@nesto.ae',
+              validator: (v) => !v!.contains('@') ? 'Invalid email' : null,
+            ),
+            const SizedBox(height: 24),
+            _buildLabel('Mobile Number *'),
+            _buildPhoneField(),
+            const SizedBox(height: 24),
+            _buildLabel('Password *'),
+            _buildTextField(
+              _passwordController,
+              'SecurePassword123',
+              isPassword: true,
+              validator: (v) => v!.length < 6 ? 'Min 6 characters' : null,
+            ),
+          ],
         ),
         const SizedBox(height: 24),
-        _buildLabel('Access Password *'),
-        _buildTextField(
-          _passwordController,
-          'Create secure password',
-          isPassword: true,
-          validator: (v) => v!.length < 6 ? 'Min 6 characters' : null,
+        _buildGlassSection(
+          title: 'Configurations',
+          children: [
+            _buildLabel('POS System'),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.03),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.white.withOpacity(0.1)),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: _selectedPosSystem,
+                  dropdownColor: const Color(0xFF1B3B0F),
+                  style: GoogleFonts.inter(color: Colors.white),
+                  isExpanded: true,
+                  items: _posOptions.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedPosSystem = newValue!;
+                    });
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            _buildLabel('Primary Color'),
+            _buildTextField(_primaryColorController, '#FF6B35'),
+            const SizedBox(height: 24),
+            _buildLabel('Logo (Optional)'),
+            _buildImagePicker(),
+            // Hidden controller field if needed, but we upload programmatically
+            // _buildTextField(_logoUrlController, 'https://example.com/logo.png'),
+          ],
+        ),
+        const SizedBox(height: 24),
+        _buildGlassSection(
+          title: 'Legal (Optional)',
+          children: [
+            _buildLabel('VAT / TRN'),
+            _buildTextField(_vatTrnController, 'Optional'),
+            const SizedBox(height: 24),
+            _buildLabel('Trade License'),
+            _buildTextField(_tradeLicenseController, 'Optional'),
+          ],
         ),
       ],
     );
@@ -568,6 +718,75 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   fontWeight: FontWeight.w800,
                   fontSize: 17,
                 ),
+              ),
+      ),
+    );
+  }
+
+  Widget _buildImagePicker() {
+    return GestureDetector(
+      behavior: HitTestBehavior
+          .opaque, // Ensure tap is detected on the entire container
+      onTap: () async {
+        try {
+          final XFile? image = await _picker.pickImage(
+            source: ImageSource.gallery,
+          );
+          if (image != null) {
+            setState(() {
+              _logoImageFile = image;
+            });
+          }
+        } catch (e) {
+          debugPrint('Error picking image: $e');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Failed to pick image: $e'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+      child: Container(
+        height: 120,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.03),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.white.withOpacity(0.1)),
+        ),
+        child: _logoImageFile != null
+            ? ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: kIsWeb
+                    ? Image.network(
+                        _logoImageFile!.path,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                      )
+                    : Image.file(
+                        File(_logoImageFile!.path),
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                      ),
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.cloud_upload_outlined,
+                    color: AppTheme.primaryColor,
+                    size: 32,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "Tap to upload store logo",
+                    style: GoogleFonts.inter(
+                      color: Colors.white54,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
               ),
       ),
     );

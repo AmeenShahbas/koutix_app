@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
   // Update this to your production server URL when deploying
-  static const String baseUrl = 'http://172.20.10.4:3000/api';
+  static const String baseUrl = 'http://192.168.1.6:3000/api';
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
@@ -91,6 +91,55 @@ class AuthService {
     }
   }
 
+  /// Signup as a Branch Manager or Independent Supermarket Owner
+  Future<Map<String, dynamic>> signupBranchManager({
+    required String email,
+    required String password,
+    required String fullName,
+    required String phoneNumber,
+    required String branchName,
+    required String address,
+    String? vatTrn,
+    String? tradeLicense,
+    String? logoUrl,
+    String? primaryColor,
+    required int expectedBranchCount,
+    required String posSystem,
+  }) async {
+    final url = Uri.parse('$baseUrl/auth/signup-branch-manager');
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+          'fullName': fullName,
+          'phoneNumber': phoneNumber,
+          'branchName': branchName,
+          'address': address,
+          'vatTrn': vatTrn,
+          'tradeLicense': tradeLicense,
+          'logoUrl': logoUrl,
+          'primaryColor': primaryColor,
+          'expectedBranchCount': expectedBranchCount,
+          'posSystem': posSystem,
+        }),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return jsonDecode(response.body);
+      } else {
+        final error = jsonDecode(response.body);
+        throw Exception(
+          error['message'] ?? 'Failed to signup as Branch Manager',
+        );
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   /// Verify an invitation token (for Branch Managers)
   Future<Map<String, dynamic>> verifyInvitation(String token) async {
     final url = Uri.parse('$baseUrl/auth/verify-invitation?token=$token');
@@ -111,7 +160,7 @@ class AuthService {
     }
   }
 
-  /// Complete onboarding for Branch Manager
+  /// Complete onboarding for Branch Manager (Invited)
   Future<Map<String, dynamic>> completeOnboarding({
     required String token,
     required String password,
