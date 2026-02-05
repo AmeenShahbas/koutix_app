@@ -154,6 +154,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
         localNumber = localNumber.replaceAll(RegExp(r'^0+'), '');
         final fullPhone = '+${_selectedCountry.phoneCode}$localNumber';
 
+        // Upload Logo if selected
+        if (_logoImageFile != null) {
+          final logoUrl = await _cloudinaryService.uploadLogo(_logoImageFile!);
+          if (logoUrl != null) {
+            _logoUrlController.text = logoUrl;
+          } else {
+            throw Exception('Failed to upload logo image');
+          }
+        }
+
         await _authService.signupChainManager(
           email: _emailController.text.trim(),
           password: _passwordController.text,
@@ -163,10 +173,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
           vatTrn: _vatTrnController.text.trim(),
           hqAddress: _hqAddressController.text.trim(),
           tradeLicense: _tradeLicenseController.text.trim(),
-          primaryColor: '#2E5915',
+          primaryColor: _primaryColorController.text.trim(),
           expectedBranchCount: 1,
           posSystem: 'Custom',
           countryCode: _selectedCountry.phoneCode,
+          logoUrl: _logoUrlController.text.trim(),
         );
         _showSuccess('Signup Successful! Pending SuperAdmin Approval.');
       }
@@ -521,6 +532,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
             const SizedBox(height: 24),
             _buildLabel('HQ Address'),
             _buildTextField(_hqAddressController, 'Full business address'),
+          ],
+        ),
+        const SizedBox(height: 24),
+        _buildGlassSection(
+          title: 'Configurations',
+          children: [
+            _buildLabel('Primary Color'),
+            _buildTextField(_primaryColorController, '#FF6B35'),
+            const SizedBox(height: 24),
+            _buildLabel('Logo (Optional)'),
+            _buildImagePicker(),
           ],
         ),
       ],
