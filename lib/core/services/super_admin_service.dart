@@ -9,7 +9,7 @@ class SuperAdminService {
 
   /// Fetch all pending chain manager approvals
   Future<List<SupermarketChain>> getPendingChainManagers() async {
-    final url = Uri.parse('$baseUrl/super-admin/pending-chains');
+    final url = Uri.parse('$baseUrl/superadmin/pending-chains');
 
     try {
       final user = FirebaseAuth.instance.currentUser;
@@ -37,7 +37,7 @@ class SuperAdminService {
 
   /// Approve a chain manager
   Future<void> approveChainManager(String chainId) async {
-    final url = Uri.parse('$baseUrl/super-admin/approve-chain/$chainId');
+    final url = Uri.parse('$baseUrl/superadmin/approve-chain/$chainId');
     try {
       final user = FirebaseAuth.instance.currentUser;
       final token = await user?.getIdToken();
@@ -60,7 +60,7 @@ class SuperAdminService {
 
   /// Reject/Cancel a chain manager
   Future<void> rejectChainManager(String chainId) async {
-    final url = Uri.parse('$baseUrl/super-admin/reject-chain/$chainId');
+    final url = Uri.parse('$baseUrl/superadmin/reject-chain/$chainId');
     try {
       final user = FirebaseAuth.instance.currentUser;
       final token = await user?.getIdToken();
