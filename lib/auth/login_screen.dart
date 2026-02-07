@@ -7,6 +7,8 @@ import '../core/theme/app_theme.dart';
 import '../core/services/auth_service.dart';
 import 'sign_up_screen.dart';
 import '../features/super_admin/dashboard/super_admin_dashboard_screen.dart';
+import '../features/chain_manager/dashboard/chain_manager_dashboard_screen.dart';
+import '../features/branch_manager/dashboard/branch_manager_dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -385,12 +387,37 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         );
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const SuperAdminDashboardScreen(),
-          ),
-        );
+        final dynamic role =
+            response['role'] ??
+            (response['user'] is Map ? response['user']['role'] : null);
+
+        Widget? targetScreen;
+
+        if (role == 'super_admin' || role == 'SuperAdmin') {
+          targetScreen = const SuperAdminDashboardScreen();
+        } else if (role == 'chain_manager' || role == 'ChainManager') {
+          targetScreen = const ChainManagerDashboardScreen();
+        } else if (role == 'branch_manager' || role == 'BranchManager') {
+          targetScreen = const BranchManagerDashboardScreen();
+        }
+
+        if (targetScreen != null) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => targetScreen!),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Unknown user role: $role',
+                style: GoogleFonts.inter(color: Colors.white),
+              ),
+              backgroundColor: Colors.red.shade900,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
       }
     } catch (e) {
       if (mounted) {
