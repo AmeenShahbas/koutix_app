@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
   // Update this to your production server URL when deploying
-  static const String baseUrl = 'http://172.20.10.4:3000/api';
+  static const String baseUrl = 'http://192.168.1.8:3001/api';
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
