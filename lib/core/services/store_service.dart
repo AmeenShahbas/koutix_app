@@ -17,7 +17,7 @@ class StoreService {
   }
 
   Future<List<Store>> getStores() async {
-    final url = Uri.parse('$baseUrl/chain-manager/stores');
+    final url = Uri.parse('$baseUrl/chain/stores');
     try {
       final headers = await _getHeaders();
       final response = await http.get(url, headers: headers);
@@ -40,7 +40,7 @@ class StoreService {
   }
 
   Future<Store> addStore(Store store) async {
-    final url = Uri.parse('$baseUrl/chain-manager/stores');
+    final url = Uri.parse('$baseUrl/chain/stores');
     try {
       final headers = await _getHeaders();
       final response = await http.post(
@@ -65,7 +65,7 @@ class StoreService {
 
   Future<void> updateStore(Store store) async {
     if (store.id == null) return; // Cannot update without ID
-    final url = Uri.parse('$baseUrl/chain-manager/stores/${store.id}');
+    final url = Uri.parse('$baseUrl/chain/stores/${store.id}');
     try {
       final headers = await _getHeaders();
       final response = await http.put(
@@ -83,7 +83,7 @@ class StoreService {
   }
 
   Future<void> deleteStore(String id) async {
-    final url = Uri.parse('$baseUrl/chain-manager/stores/$id');
+    final url = Uri.parse('$baseUrl/chain/stores/$id');
     try {
       final headers = await _getHeaders();
       final response = await http.delete(url, headers: headers);
