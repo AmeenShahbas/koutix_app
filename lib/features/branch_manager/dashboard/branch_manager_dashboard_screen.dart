@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:math' as math;
 import 'dart:ui';
 import '../../../core/theme/app_theme.dart';
+import '../../../auth/login_screen.dart';
 
 class BranchManagerDashboardScreen extends StatefulWidget {
   const BranchManagerDashboardScreen({super.key});
@@ -101,6 +102,15 @@ class _BranchManagerDashboardScreenState
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: Colors.white),
+        onPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+          );
+        },
+      ),
       title: Text(
         "Branch Manager Dashboard",
         style: GoogleFonts.poppins(
