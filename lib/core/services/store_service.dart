@@ -16,31 +16,33 @@ class StoreService {
     };
   }
 
-  Future<List<Store>> getStores() async {
-    final url = Uri.parse('$baseUrl/chain-manager/stores');
+  Future<Map<String, dynamic>> getChainDashboard() async {
+    final url = Uri.parse('$baseUrl/chain/dashboard');
     try {
       final headers = await _getHeaders();
       final response = await http.get(url, headers: headers);
 
-      if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
-        return data.map((json) => Store.fromJson(json)).toList();
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final decoded = jsonDecode(response.body);
+        if (decoded is Map<String, dynamic>) {
+          return decoded;
+        } else if (decoded is List) {
+          // If the backend returns a list, wrap it
+          return {'branches': decoded};
+        }
+        return {};
       } else {
-        // Fallback for demo/mock if backend not ready
-        // In a real scenario, we would throw or return empty.
-        // For this task, avoiding hard crash if backend is missing.
-        if (response.statusCode == 404) return [];
-        throw Exception('Failed to load stores: ${response.statusCode}');
+        if (response.statusCode == 404) return {'branches': []};
+        throw Exception('Failed to load dashboard: ${response.statusCode}');
       }
     } catch (e) {
-      // Return empty list if network error for now to show UI functionality
-      print('Error fetching stores: $e');
-      return [];
+      print('Error fetching dashboard: $e');
+      return {'branches': []};
     }
   }
 
   Future<Store> addStore(Store store) async {
-    final url = Uri.parse('$baseUrl/chain-manager/stores');
+    final url = Uri.parse('$baseUrl/chain/stores');
     try {
       final headers = await _getHeaders();
       final response = await http.post(
@@ -65,7 +67,7 @@ class StoreService {
 
   Future<void> updateStore(Store store) async {
     if (store.id == null) return; // Cannot update without ID
-    final url = Uri.parse('$baseUrl/chain-manager/stores/${store.id}');
+    final url = Uri.parse('$baseUrl/chain/stores/${store.id}');
     try {
       final headers = await _getHeaders();
       final response = await http.put(
@@ -83,7 +85,7 @@ class StoreService {
   }
 
   Future<void> deleteStore(String id) async {
-    final url = Uri.parse('$baseUrl/chain-manager/stores/$id');
+    final url = Uri.parse('$baseUrl/chain/stores/$id');
     try {
       final headers = await _getHeaders();
       final response = await http.delete(url, headers: headers);

@@ -5,6 +5,8 @@ import 'dart:ui';
 import '../../../core/theme/app_theme.dart';
 import '../../../shared_models/store_model.dart';
 import '../../../core/services/store_service.dart';
+import '../../../auth/login_screen.dart';
+import '../../manager/dashboard/branch_screen.dart';
 
 class ChainManagerDashboardScreen extends StatefulWidget {
   const ChainManagerDashboardScreen({super.key});
@@ -18,24 +20,89 @@ class _ChainManagerDashboardScreenState
     extends State<ChainManagerDashboardScreen> {
   final StoreService _storeService = StoreService();
   List<Store> _stores = [];
+  Map<String, dynamic> _dashboardStats = {};
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _loadStores();
+    _loadDashboard();
   }
 
-  Future<void> _loadStores() async {
+  Future<void> _loadDashboard() async {
     setState(() => _isLoading = true);
     try {
-      final stores = await _storeService.getStores();
-      setState(() => _stores = stores);
+      final data = await _storeService.getChainDashboard();
+
+      List<dynamic> branchesData = [];
+      if (data.containsKey('branches') && data['branches'] is List) {
+        branchesData = data['branches'];
+      } else if (data.containsKey('stores') && data['stores'] is List) {
+        branchesData = data['stores'];
+      } else if (data.containsKey('data') && data['data'] is List) {
+        branchesData = data['data'];
+      }
+
+      setState(() {
+        _dashboardStats = data;
+        _stores = branchesData.map((e) => Store.fromJson(e)).toList();
+      });
     } catch (e) {
-      debugPrint("Error loading stores: $e");
+      debugPrint("Error loading dashboard: $e");
     } finally {
       setState(() => _isLoading = false);
     }
+  }
+
+  String _formatKey(String key) {
+    if (key == 'branches' || key == 'stores' || key == 'data') return '';
+    if (key.toLowerCase() == 'product' ||
+        key.toLowerCase() == 'products' ||
+        key.toLowerCase() == 'manager' ||
+        key.toLowerCase() == 'managers')
+      return 'Branch';
+    final RegExp camelCasePattern = RegExp(r'(?<=[a-z])(?=[A-Z])');
+    String spaced = key.replaceAll(camelCasePattern, ' ').replaceAll('_', ' ');
+    if (spaced.isEmpty) return key;
+    return spaced
+        .split(' ')
+        .map((word) {
+          if (word.isEmpty) return '';
+          return word[0].toUpperCase() + word.substring(1).toLowerCase();
+        })
+        .join(' ');
+  }
+
+  Widget _buildStatCard(String title, String value, {VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.05),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.white.withOpacity(0.1)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: GoogleFonts.inter(color: Colors.white70, fontSize: 14),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              value,
+              style: GoogleFonts.poppins(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   void _showBranchDialog({Store? store}) {
@@ -307,27 +374,32 @@ class _ChainManagerDashboardScreenState
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Chain Manager Dashboard",
-                                style: GoogleFonts.poppins(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Chain Manager Dashboard",
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                "Manage your branches and performance",
-                                style: GoogleFonts.inter(
-                                  fontSize: 14,
-                                  color: Colors.white70,
+                                const SizedBox(height: 4),
+                                Text(
+                                  "Manage your branches and performance",
+                                  style: GoogleFonts.inter(
+                                    fontSize: 14,
+                                    color: Colors.white70,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
+                          const SizedBox(width: 16),
                           ElevatedButton.icon(
                             onPressed: () => _showBranchDialog(),
                             icon: const Icon(Icons.add, color: Colors.white),
@@ -352,141 +424,85 @@ class _ChainManagerDashboardScreenState
                         ],
                       ),
                       const SizedBox(height: 32),
-                      Expanded(
-                        child: _isLoading
-                            ? const Center(child: CircularProgressIndicator())
-                            : _stores.isEmpty
-                            ? Center(
-                                child: Text(
-                                  "No branches found. Add your first branch!",
-                                  style: GoogleFonts.inter(
-                                    color: Colors.white54,
-                                  ),
-                                ),
-                              )
-                            : GridView.builder(
-                                gridDelegate:
-                                    const SliverGridDelegateWithMaxCrossAxisExtent(
-                                      maxCrossAxisExtent: 400,
-                                      crossAxisSpacing: 24,
-                                      mainAxisSpacing: 24,
-                                      childAspectRatio: 1.4,
-                                    ),
-                                itemCount: _stores.length,
-                                itemBuilder: (context, index) {
-                                  final store = _stores[index];
-                                  return Container(
-                                    padding: const EdgeInsets.all(24),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withOpacity(0.08),
-                                      borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(
-                                        color: Colors.white.withOpacity(0.05),
+                      // Display dynamic dashboard stats if present
+                      if (_dashboardStats.isNotEmpty)
+                        Builder(
+                          builder: (context) {
+                            final statEntries = _dashboardStats.entries.where((
+                              e,
+                            ) {
+                              if (e.value is List ||
+                                  e.value is Map ||
+                                  e.value == null)
+                                return false;
+                              if (e.key == 'branches' ||
+                                  e.key == 'stores' ||
+                                  e.key == 'data' ||
+                                  e.key.toLowerCase() == 'transaction' ||
+                                  e.key.toLowerCase() == 'transactions' ||
+                                  e.key.toLowerCase() == 'product' ||
+                                  e.key.toLowerCase() == 'products')
+                                return false;
+                              return true;
+                            }).toList();
+
+                            if (statEntries.isEmpty)
+                              return const SizedBox.shrink();
+
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 32.0),
+                              child: Row(
+                                children: statEntries.asMap().entries.map((
+                                  entry,
+                                ) {
+                                  final isLast =
+                                      entry.key == statEntries.length - 1;
+                                  final formattedKey = _formatKey(
+                                    entry.value.key,
+                                  );
+                                  return Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                        right: isLast ? 0.0 : 16.0,
+                                      ),
+                                      child: _buildStatCard(
+                                        formattedKey,
+                                        entry.value.value.toString(),
+                                        onTap:
+                                            entry.value.key.toLowerCase() ==
+                                                    'manager' ||
+                                                entry.value.key.toLowerCase() ==
+                                                    'managers'
+                                            ? () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        BranchScreen(
+                                                          branches: _stores,
+                                                        ),
+                                                  ),
+                                                );
+                                              }
+                                            : null,
                                       ),
                                     ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Icon(
-                                              Icons.store,
-                                              color: AppTheme.primaryColor,
-                                              size: 32,
-                                            ),
-                                            Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                IconButton(
-                                                  icon: const Icon(
-                                                    Icons.edit,
-                                                    color: Colors.white54,
-                                                    size: 20,
-                                                  ),
-                                                  onPressed: () =>
-                                                      _showBranchDialog(
-                                                        store: store,
-                                                      ),
-                                                  tooltip: 'Edit Branch',
-                                                ),
-                                                IconButton(
-                                                  icon: const Icon(
-                                                    Icons.delete_outline,
-                                                    color: Colors.white54,
-                                                    size: 20,
-                                                  ),
-                                                  onPressed: () =>
-                                                      _deleteStore(store),
-                                                  tooltip: 'Delete Branch',
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 16),
-                                        Text(
-                                          store.name,
-                                          style: GoogleFonts.poppins(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.white,
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        const SizedBox(height: 8),
-                                        Text(
-                                          store.address,
-                                          style: GoogleFonts.inter(
-                                            color: Colors.white70,
-                                            fontSize: 13,
-                                          ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        const Spacer(),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                            vertical: 6,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: Colors.black26,
-                                            borderRadius: BorderRadius.circular(
-                                              8,
-                                            ),
-                                          ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const Icon(
-                                                Icons.person_outline,
-                                                color: Colors.white54,
-                                                size: 14,
-                                              ),
-                                              const SizedBox(width: 8),
-                                              Flexible(
-                                                child: Text(
-                                                  store.managerEmail,
-                                                  style: GoogleFonts.inter(
-                                                    color: Colors.white54,
-                                                    fontSize: 12,
-                                                  ),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
                                   );
-                                },
+                                }).toList(),
                               ),
+                            );
+                          },
+                        ),
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            "Total Management and Overview Dashboard.",
+                            style: GoogleFonts.inter(
+                              color: Colors.white54,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -501,6 +517,15 @@ class _ChainManagerDashboardScreenState
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: Colors.white),
+        onPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+          );
+        },
+      ),
       title: Text(
         "Chain Manager Dashboard",
         style: GoogleFonts.poppins(
