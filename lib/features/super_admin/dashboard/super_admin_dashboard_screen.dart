@@ -5,6 +5,7 @@ import 'dart:ui';
 import '../../../core/models/supermarket_chain_model.dart';
 import '../../../core/services/super_admin_service.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../auth/login_screen.dart';
 
 class SuperAdminDashboardScreen extends StatefulWidget {
   const SuperAdminDashboardScreen({super.key});
@@ -246,6 +247,15 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen> {
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: Colors.white),
+        onPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+          );
+        },
+      ),
       title: Text(
         "Super Admin Dashboard",
         style: GoogleFonts.poppins(
